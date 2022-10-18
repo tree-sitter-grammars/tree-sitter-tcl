@@ -23,7 +23,7 @@ proc foo arg1 {
 }
 
 proc foo {} {
-echo [echo hello]
+    echo [echo hello]
 }
 
 }
