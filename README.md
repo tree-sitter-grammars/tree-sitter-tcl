@@ -3,7 +3,6 @@ Treesitter Neovim filetype plugin for TCL
 ## Requirements
 
 - `make`
-- `tree-sitter`
 - C compiler
 
 **NOTE**: this plugin does **not** require [nvim-treesitter].
