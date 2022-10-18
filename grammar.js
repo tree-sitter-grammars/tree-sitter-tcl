@@ -24,7 +24,7 @@ module.exports = grammar({
 
     _terminator: _ => choice('\n', ';'),
 
-    comment: _ => /#[^\n]+/,
+    comment: _ => /#[^\n]*/,
 
     _builtin: $ => choice(
       $.procedure,
