@@ -1,17 +1,45 @@
 
 (comment) @comment
 
-(procedure
-  "proc" @keyword.function
-  name: (simple_word)
-)
+"proc" @keyword.function
 
-[ "namespace" "set" ] @keyword
-[ "if" "else" "elseif" ] @conditional
+[
+  "global"
+  "namespace"
+  "set"
+  "try"
+  "on"
+  "error"
+] @keyword
 
+[ ";" ] @punctuation.delimiter
+
+[ "foreach" ] @keyword
+
+[
+  "if"
+  "else"
+  "elseif"
+] @conditional
+
+[
+ "eq"
+ "ne"
+ "=="
+ "!="
+ "&&"
+ "||"
+ "in"
+ "<"
+ ">"
+] @operator
+
+(variable_substitution) @parameter
 (quoted_word) @string
+(escaped_character) @string.escape
 
 [
   "{" "}"
   "[" "]"
-] @structure
+  ";"
+] @punctuation.delimiter

@@ -1,9 +1,35 @@
+const PREC = {
+  or: 10,
+  and: 11,
+  not: 12,
+  compare: 13,
+  bitwise_or: 14,
+  bitwise_and: 15,
+  xor: 16,
+  shift: 17,
+  plus: 18,
+  times: 19,
+  unary: 20,
+  power: 21,
+  call: 22,
+}
+
 module.exports = grammar({
   name: 'tcl',
 
   word: $ => $.simple_word,
 
   inline: $ => [
+    $._expr,
+    $._commands,
+    $._builtin,
+    $._terminator,
+    $._word,
+  ],
+
+  extras: $ => [
+    /\s+/,
+    /\\\r?\n/
   ],
 
   conflicts: $ => [
@@ -25,19 +51,48 @@ module.exports = grammar({
     comment: _ => /#[^\n]*/,
 
     _builtin: $ => choice(
-      $.procedure,
       $.conditional,
-      $.set,
+      $.global,
       $.namespace,
+      $.procedure,
+      $.set,
+      $.try,
+      $.foreach,
+    ),
+
+    foreach: $ => seq(
+      "foreach",
+      $.arguments,
+      $._word,
+      $.command_block,
+    ),
+
+    global: $ => seq(
+      "global",
+      $.word_list
     ),
 
     namespace: $ => seq(
       'namespace',
-      seq(
-        'eval',
-        $._word,
-        $.command_block,
+      choice(
+        seq(
+          'eval',
+          $._word,
+          $._cword,
+        ),
+        $.word_list, // Fallback for dynamic stuff
       )
+    ),
+
+    try: $ => seq(
+      "try",
+      $._cword,
+      optional(seq(
+        "on",
+        "error",
+        $.arguments,
+        $._cword,
+      ))
     ),
 
     _command: $ => choice(
@@ -47,7 +102,7 @@ module.exports = grammar({
     ),
 
     command: $ => seq(
-      field('name', $._word),
+      field('name', $.simple_word),
       optional(field('arguments', $.word_list))
     ),
 
@@ -59,16 +114,25 @@ module.exports = grammar({
         $.simple_word,
         $.quoted_word,
         $.braced_word,
+        // $.command_block,
         $.variable_substitution,
       ),
 
-    variable_substitution: $ => choice(
-      $._simple_variable,
-      $._braced_variable
+    _cword: $ => choice(
+      $.command_substitution,
+      $.simple_word,
+      $.quoted_word,
+      $.command_block,
+      $.variable_substitution,
     ),
 
-    _simple_variable: _ => seq('$', /[a-zA-Z_][a-zA-Z0-9_]+/),
-    _braced_variable: _ => seq('${', /[^}]+/, '}'),
+    _ns_delim: _ => "::",
+    _ident: _ => /[a-zA-Z_][a-zA-Z0-9_]+/,
+
+    variable_substitution: $ => choice(
+      seq('$', repeat1(seq(optional($._ns_delim), $._ident))),
+      seq('${', /[^}]+/, '}'),
+    ),
 
     command_block: $ => seq('{', optional($.commands), '}'),
 
@@ -77,50 +141,74 @@ module.exports = grammar({
     procedure: $ => seq(
       "proc",
       field('name', $._word),
-      field('arguments', $.procedure_arguments),
-      field('body', choice(
-        $.command_block,
-        $.simple_word
-      ))
+      field('arguments', $.arguments),
+      field('body', $._cword)
     ),
 
-    procedure_arguments: $ => choice(
+    arguments: $ => choice(
       seq('{', repeat($.simple_word), '}'),
       $.simple_word,
     ),
 
+    expr: $ => choice(
+      seq("{", $.expr, "}"),
+      $.binop_expr,
+      $._expr,
+    ),
+
+    _expr: $ => choice(
+      $.variable_substitution,
+      $.command_substitution,
+      $.simple_word,
+      $.quoted_word,
+      // $.braced_word,
+    ),
+
+    binop_expr: $ => choice(
+      prec.left(PREC.plus, seq($.expr, "+", $.expr)),
+      prec.left(PREC.plus, seq($.expr, "-", $.expr)),
+      prec.left(PREC.compare, seq($.expr, "eq", $.expr)),
+      prec.left(PREC.compare, seq($.expr, "==", $.expr)),
+      prec.left(PREC.compare, seq($.expr, "ne", $.expr)),
+      prec.left(PREC.compare, seq($.expr, "!=", $.expr)),
+      prec.left(PREC.compare, seq($.expr, "in", $.expr)),
+      prec.left(PREC.compare, seq($.expr, ">", $.expr)),
+      prec.left(PREC.compare, seq($.expr, "<", $.expr)),
+      prec.left(PREC.and, seq($.expr, "&&", $.expr)),
+      prec.left(PREC.or, seq($.expr, "||", $.expr)),
+    ),
+
     elseif: $ => seq(
       "elseif",
-      field('condition', $._word),
-      $.command_block,
+      field('condition', $.expr),
+      $._cword,
     ),
 
     else: $ => seq(
       "else",
-      $.command_block,
+      $._cword,
     ),
 
     conditional: $ => seq(
       "if",
-      field('condition', $._word),
-      $.command_block,
+      field('condition', $.expr),
+      $._cword,
       repeat($.elseif),
       optional($.else),
     ),
 
-    quoted_word: $ =>
-      seq(
-        '"',
-        repeat1(
-          choice(
-            $._quoted_word_content,
-            $.variable_substitution,
-            $.command_substitution,
-            $.escaped_character,
-          ),
+    quoted_word: $ => seq(
+      '"',
+      repeat(
+        choice(
+          $._quoted_word_content,
+          $.variable_substitution,
+          $.command_substitution,
+          $.escaped_character,
         ),
-        '"',
       ),
+      '"',
+    ),
 
     escaped_character: _ => /\\./,
 
