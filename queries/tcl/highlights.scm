@@ -6,7 +6,7 @@
   name: (simple_word)
 )
 
-[ "set" ] @keyword
+[ "namespace" "set" ] @keyword
 [ "if" "else" "elseif" ] @conditional
 
 (quoted_word) @string

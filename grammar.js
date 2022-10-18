@@ -4,8 +4,6 @@ module.exports = grammar({
   word: $ => $.simple_word,
 
   inline: $ => [
-    $._terminator,
-    $._builtin,
   ],
 
   conflicts: $ => [
@@ -30,6 +28,16 @@ module.exports = grammar({
       $.procedure,
       $.conditional,
       $.set,
+      $.namespace,
+    ),
+
+    namespace: $ => seq(
+      'namespace',
+      seq(
+        'eval',
+        $._word,
+        $.command_block,
+      )
     ),
 
     _command: $ => choice(
@@ -47,11 +55,11 @@ module.exports = grammar({
 
     _word: $ =>
       choice(
+        $.command_substitution,
         $.simple_word,
         $.quoted_word,
         $.braced_word,
         $.variable_substitution,
-        $.command_substitution,
       ),
 
     variable_substitution: $ => choice(
@@ -119,7 +127,7 @@ module.exports = grammar({
     _quoted_word_content: _ => /[^$\\\[\]"]+/,
 
     braced_word: $ => seq('{', repeat(choice('\n', $._word)), '}'),
-    command_substitution: $ => seq('[', $.commands, ']'),
+    command_substitution: $ => seq('[', $._command, ']'),
 
     simple_word: _ => token(/[^$\s\\\[\]{};"]+/),
   }

@@ -96,7 +96,27 @@
       "required": true,
       "types": [
         {
-          "type": "commands",
+          "type": "command",
+          "named": true
+        },
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "conditional",
+          "named": true
+        },
+        {
+          "type": "namespace",
+          "named": true
+        },
+        {
+          "type": "procedure",
+          "named": true
+        },
+        {
+          "type": "set",
           "named": true
         }
       ]
@@ -120,6 +140,10 @@
         },
         {
           "type": "conditional",
+          "named": true
+        },
+        {
+          "type": "namespace",
           "named": true
         },
         {
@@ -235,6 +259,41 @@
       "types": [
         {
           "type": "command_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "namespace",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "braced_word",
+          "named": true
+        },
+        {
+          "type": "command_block",
+          "named": true
+        },
+        {
+          "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
+          "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
           "named": true
         }
       ]
@@ -386,6 +445,10 @@
           "named": true
         },
         {
+          "type": "namespace",
+          "named": true
+        },
+        {
           "type": "procedure",
           "named": true
         },
@@ -477,7 +540,15 @@
     "named": true
   },
   {
+    "type": "eval",
+    "named": false
+  },
+  {
     "type": "if",
+    "named": false
+  },
+  {
+    "type": "namespace",
     "named": false
   },
   {

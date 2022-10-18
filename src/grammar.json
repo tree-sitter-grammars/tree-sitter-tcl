@@ -65,6 +65,36 @@
         {
           "type": "SYMBOL",
           "name": "set"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "namespace"
+        }
+      ]
+    },
+    "namespace": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "namespace"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "eval"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_word"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "command_block"
+            }
+          ]
         }
       ]
     },
@@ -126,6 +156,10 @@
       "members": [
         {
           "type": "SYMBOL",
+          "name": "command_substitution"
+        },
+        {
+          "type": "SYMBOL",
           "name": "simple_word"
         },
         {
@@ -139,10 +173,6 @@
         {
           "type": "SYMBOL",
           "name": "variable_substitution"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "command_substitution"
         }
       ]
     },
@@ -459,7 +489,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "commands"
+          "name": "_command"
         },
         {
           "type": "STRING",
@@ -488,10 +518,7 @@
   ],
   "precedences": [],
   "externals": [],
-  "inline": [
-    "_terminator",
-    "_builtin"
-  ],
+  "inline": [],
   "supertypes": []
 }
 
