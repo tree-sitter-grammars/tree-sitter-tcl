@@ -12,9 +12,7 @@
   "error"
 ] @keyword
 
-[ ";" ] @punctuation.delimiter
-
-[ "foreach" ] @keyword
+[ "foreach" ] @repeat
 
 [
   "if"

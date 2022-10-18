@@ -11,6 +11,9 @@ proc foo {arg1 arg2} {
 # dwqdw
 
 proc foo arg1 {
+    foreach a {1 2 3 4 5} {
+        put $i
+    }
     echo "hello"
     echo "word$hi \$bye word"
     if hello {
