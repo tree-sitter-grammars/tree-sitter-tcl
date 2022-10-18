@@ -127,7 +127,7 @@ module.exports = grammar({
     ),
 
     _ns_delim: _ => "::",
-    _ident: _ => /[a-zA-Z_][a-zA-Z0-9_]+/,
+    _ident: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
     variable_substitution: $ => choice(
       seq('$', repeat1(seq(optional($._ns_delim), $._ident))),
@@ -152,6 +152,8 @@ module.exports = grammar({
 
     expr: $ => choice(
       seq("{", $.expr, "}"),
+      seq("(", $.expr, ")"),
+      $.unary_expr,
       $.binop_expr,
       $._expr,
     ),
@@ -163,6 +165,8 @@ module.exports = grammar({
       $.quoted_word,
       // $.braced_word,
     ),
+
+    unary_expr: $ => seq("!", $.expr),
 
     binop_expr: $ => choice(
       prec.left(PREC.plus, seq($.expr, "+", $.expr)),

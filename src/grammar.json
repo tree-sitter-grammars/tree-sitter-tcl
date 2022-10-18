@@ -304,7 +304,7 @@
     },
     "_ident": {
       "type": "PATTERN",
-      "value": "[a-zA-Z_][a-zA-Z0-9_]+"
+      "value": "[a-zA-Z_][a-zA-Z0-9_]*"
     },
     "variable_substitution": {
       "type": "CHOICE",
@@ -486,6 +486,27 @@
           ]
         },
         {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "("
+            },
+            {
+              "type": "SYMBOL",
+              "name": "expr"
+            },
+            {
+              "type": "STRING",
+              "value": ")"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unary_expr"
+        },
+        {
           "type": "SYMBOL",
           "name": "binop_expr"
         },
@@ -513,6 +534,19 @@
         {
           "type": "SYMBOL",
           "name": "quoted_word"
+        }
+      ]
+    },
+    "unary_expr": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "!"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "expr"
         }
       ]
     },

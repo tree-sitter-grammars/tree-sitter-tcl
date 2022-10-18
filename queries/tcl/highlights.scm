@@ -32,6 +32,7 @@
  "in"
  "<"
  ">"
+ "!"
 ] @operator
 
 (variable_substitution) @parameter
