@@ -6,6 +6,8 @@ Treesitter Neovim filetype plugin for TCL
 - `tree-sitter`
 - C compiler
 
+**NOTE**: this plugin does **not** require [nvim-treesitter].
+
 ## Installation
 
 [packer.nvim]:
@@ -14,3 +16,4 @@ use {'lewis6991/tree-sitter-tcl', run = 'make }
 ```
 
 [packer.nvim]: https://github.com/wbthomason/packer.nvim
+[nvim-treesitter]: https://github.com/nvim-treesitter/nvim-treesitter
