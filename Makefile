@@ -2,7 +2,7 @@
 
 build: parser/tcl.so
 
-parser/tcl.so: src/parser.c
+parser/tcl.so: src/parser.c src/scanner.c
 	$(RM) $@
 	mkdir -p parser
 	$(CC) -o $@ -Isrc $^ -shared -fPIC -Os

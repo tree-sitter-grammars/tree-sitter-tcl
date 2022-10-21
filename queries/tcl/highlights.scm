@@ -6,13 +6,19 @@
 [
   "global"
   "namespace"
+  "expr"
   "set"
   "try"
   "on"
   "error"
 ] @keyword
 
-[ "foreach" ] @repeat
+(unpack) @operator
+
+[
+ "while"
+ "foreach"
+] @repeat
 
 [
   "if"
@@ -28,8 +34,11 @@
  "&&"
  "||"
  "in"
+ "ni"
  "<"
+ "<="
  ">"
+ ">="
  "!"
 ] @operator
 

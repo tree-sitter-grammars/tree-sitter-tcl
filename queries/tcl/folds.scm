@@ -1,2 +1,1 @@
-
-(procedure) @fold
+(braced_word) @fold
