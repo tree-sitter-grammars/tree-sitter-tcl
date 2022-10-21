@@ -51,3 +51,6 @@
   "[" "]"
   ";"
 ] @punctuation.delimiter
+
+((simple_word) @number
+ (#lua-match? @number "^[0-9]+$"))
