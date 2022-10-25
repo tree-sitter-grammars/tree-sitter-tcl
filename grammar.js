@@ -67,7 +67,7 @@ module.exports = grammar({
 
     expr_cmd: $ => seq('expr', $.expr),
 
-    foreach: $ => seq("foreach", $.arguments, $._word, $._word),
+    foreach: $ => seq("foreach", $.arguments, $._word_simple, $._word),
 
     global: $ => seq("global", repeat($._concat_word)),
 
@@ -103,6 +103,13 @@ module.exports = grammar({
       optional($.unpack),
       choice(
         $.braced_word,
+        $._concat_word,
+      )
+    ),
+
+    _word_simple: $ => seq(
+      choice(
+        $.braced_word_simple,
         $._concat_word,
       )
     ),
@@ -176,53 +183,57 @@ module.exports = grammar({
       $.simple_word,
     ),
 
-    expr: $ => choice(
-      seq("{", $.expr, "}"),
-      seq("(", $.expr, ")"),
-      seq($.simple_word, "(", $.expr, ")"),
+    _expr: $ => choice(
+      seq("(", $._expr, ")"),
+      seq($.simple_word, "(", $._expr, ")"),
       $.unary_expr,
       $.binop_expr,
       $.ternary_expr,
       $._concat_word,
     ),
 
-    unary_expr: $ => prec.left(PREC.unary, seq(choice("-", "+", "~", "!"), $.expr)),
-
-    binop_expr: $ => choice(
-      prec.left(PREC.exp,          seq($.expr, "**",  $.expr)),
-
-      prec.left(PREC.muldiv,       seq($.expr, "/",  $.expr)),
-      prec.left(PREC.muldiv,       seq($.expr, "*",  $.expr)),
-      prec.left(PREC.muldiv,       seq($.expr, "%",  $.expr)),
-      prec.left(PREC.addsub,       seq($.expr, "+",  $.expr)),
-      prec.left(PREC.addsub,       seq($.expr, "-",  $.expr)),
-
-      prec.left(PREC.shift,        seq($.expr, "<<", $.expr)),
-      prec.left(PREC.shift,        seq($.expr, ">>", $.expr)),
-
-      prec.left(PREC.compare,      seq($.expr, ">",  $.expr)),
-      prec.left(PREC.compare,      seq($.expr, "<",  $.expr)),
-      prec.left(PREC.compare,      seq($.expr, ">=", $.expr)),
-      prec.left(PREC.compare,      seq($.expr, "<=", $.expr)),
-
-      prec.left(PREC.equal_bool,   seq($.expr, "==", $.expr)),
-      prec.left(PREC.equal_bool,   seq($.expr, "!=", $.expr)),
-
-      prec.left(PREC.equal_string, seq($.expr, "eq", $.expr)),
-      prec.left(PREC.equal_string, seq($.expr, "ne", $.expr)),
-
-      prec.left(PREC.contain,      seq($.expr, "in", $.braced_word_simple)),
-      prec.left(PREC.contain,      seq($.expr, "ni", $.braced_word_simple)),
-
-      prec.left(PREC.and_bit,      seq($.expr, "&", $.expr)),
-      prec.left(PREC.xor_bit,      seq($.expr, "^", $.expr)),
-      prec.left(PREC.or_bit,       seq($.expr, "|", $.expr)),
-
-      prec.left(PREC.and_logical,  seq($.expr, "&&", $.expr)),
-      prec.left(PREC.or_logical,   seq($.expr, "||", $.expr)),
+    expr: $ => choice(
+      seq('{', $._expr, '}'),
+      $._expr,
     ),
 
-    ternary_expr: $ => prec.left(PREC.ternary, seq($.expr, '?', $.expr, ':', $.expr)),
+    unary_expr: $ => prec.left(PREC.unary, seq(choice("-", "+", "~", "!"), $._expr)),
+
+    binop_expr: $ => choice(
+      prec.left(PREC.exp,          seq($._expr, "**",  $._expr)),
+
+      prec.left(PREC.muldiv,       seq($._expr, "/",  $._expr)),
+      prec.left(PREC.muldiv,       seq($._expr, "*",  $._expr)),
+      prec.left(PREC.muldiv,       seq($._expr, "%",  $._expr)),
+      prec.left(PREC.addsub,       seq($._expr, "+",  $._expr)),
+      prec.left(PREC.addsub,       seq($._expr, "-",  $._expr)),
+
+      prec.left(PREC.shift,        seq($._expr, "<<", $._expr)),
+      prec.left(PREC.shift,        seq($._expr, ">>", $._expr)),
+
+      prec.left(PREC.compare,      seq($._expr, ">",  $._expr)),
+      prec.left(PREC.compare,      seq($._expr, "<",  $._expr)),
+      prec.left(PREC.compare,      seq($._expr, ">=", $._expr)),
+      prec.left(PREC.compare,      seq($._expr, "<=", $._expr)),
+
+      prec.left(PREC.equal_bool,   seq($._expr, "==", $._expr)),
+      prec.left(PREC.equal_bool,   seq($._expr, "!=", $._expr)),
+
+      prec.left(PREC.equal_string, seq($._expr, "eq", $._expr)),
+      prec.left(PREC.equal_string, seq($._expr, "ne", $._expr)),
+
+      prec.left(PREC.contain,      seq($._expr, "in", $.braced_word_simple)),
+      prec.left(PREC.contain,      seq($._expr, "ni", $.braced_word_simple)),
+
+      prec.left(PREC.and_bit,      seq($._expr, "&", $._expr)),
+      prec.left(PREC.xor_bit,      seq($._expr, "^", $._expr)),
+      prec.left(PREC.or_bit,       seq($._expr, "|", $._expr)),
+
+      prec.left(PREC.and_logical,  seq($._expr, "&&", $._expr)),
+      prec.left(PREC.or_logical,   seq($._expr, "||", $._expr)),
+    ),
+
+    ternary_expr: $ => prec.left(PREC.ternary, seq($._expr, '?', $._expr, ':', $._expr)),
 
     elseif: $ => seq(
       "elseif",

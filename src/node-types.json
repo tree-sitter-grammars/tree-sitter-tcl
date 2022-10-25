@@ -76,11 +76,39 @@
       "required": true,
       "types": [
         {
+          "type": "binop_expr",
+          "named": true
+        },
+        {
           "type": "braced_word_simple",
           "named": true
         },
         {
-          "type": "expr",
+          "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "concat",
+          "named": true
+        },
+        {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
+          "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "ternary_expr",
+          "named": true
+        },
+        {
+          "type": "unary_expr",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
           "named": true
         }
       ]
@@ -449,10 +477,6 @@
           "named": true
         },
         {
-          "type": "expr",
-          "named": true
-        },
-        {
           "type": "quoted_word",
           "named": true
         },
@@ -504,6 +528,10 @@
         },
         {
           "type": "braced_word",
+          "named": true
+        },
+        {
+          "type": "braced_word_simple",
           "named": true
         },
         {
@@ -786,7 +814,35 @@
       "required": true,
       "types": [
         {
-          "type": "expr",
+          "type": "binop_expr",
+          "named": true
+        },
+        {
+          "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "concat",
+          "named": true
+        },
+        {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
+          "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "ternary_expr",
+          "named": true
+        },
+        {
+          "type": "unary_expr",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
           "named": true
         }
       ]
@@ -840,11 +896,39 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
-          "type": "expr",
+          "type": "binop_expr",
+          "named": true
+        },
+        {
+          "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "concat",
+          "named": true
+        },
+        {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
+          "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "ternary_expr",
+          "named": true
+        },
+        {
+          "type": "unary_expr",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
           "named": true
         }
       ]
