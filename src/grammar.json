@@ -1175,8 +1175,17 @@
                 "value": "in"
               },
               {
-                "type": "SYMBOL",
-                "name": "braced_word_simple"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_concat_word"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "braced_word_simple"
+                  }
+                ]
               }
             ]
           }
@@ -1196,8 +1205,17 @@
                 "value": "ni"
               },
               {
-                "type": "SYMBOL",
-                "name": "braced_word_simple"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_concat_word"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "braced_word_simple"
+                  }
+                ]
               }
             ]
           }

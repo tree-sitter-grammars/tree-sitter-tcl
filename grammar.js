@@ -222,8 +222,8 @@ module.exports = grammar({
       prec.left(PREC.equal_string, seq($._expr, "eq", $._expr)),
       prec.left(PREC.equal_string, seq($._expr, "ne", $._expr)),
 
-      prec.left(PREC.contain,      seq($._expr, "in", $.braced_word_simple)),
-      prec.left(PREC.contain,      seq($._expr, "ni", $.braced_word_simple)),
+      prec.left(PREC.contain,      seq($._expr, "in", choice($._concat_word, $.braced_word_simple))),
+      prec.left(PREC.contain,      seq($._expr, "ni", choice($._concat_word, $.braced_word_simple))),
 
       prec.left(PREC.and_bit,      seq($._expr, "&", $._expr)),
       prec.left(PREC.xor_bit,      seq($._expr, "^", $._expr)),
