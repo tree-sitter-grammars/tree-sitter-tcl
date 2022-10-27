@@ -595,7 +595,17 @@
   {
     "type": "id",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "concat",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "namespace",
@@ -665,6 +675,10 @@
         "required": true,
         "types": [
           {
+            "type": "braced_word",
+            "named": true
+          },
+          {
             "type": "command_substitution",
             "named": true
           },
@@ -678,6 +692,10 @@
           },
           {
             "type": "simple_word",
+            "named": true
+          },
+          {
+            "type": "unpack",
             "named": true
           },
           {
@@ -1101,6 +1119,10 @@
   },
   {
     "type": ":",
+    "named": false
+  },
+  {
+    "type": "::",
     "named": false
   },
   {

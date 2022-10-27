@@ -44,7 +44,7 @@ module.exports = grammar({
 
     _commands: $ => seq(
       interleaved1($._command, $._terminator),
-      optional($._terminator)
+      repeat($._terminator)
     ),
 
     _terminator: _ => choice('\n', ';'),
@@ -107,12 +107,10 @@ module.exports = grammar({
       )
     ),
 
-    _word_simple: $ => seq(
-      choice(
-        $.braced_word_simple,
-        $._concat_word,
-      )
-    ),
+    _word_simple: $ => seq(choice(
+      $.braced_word_simple,
+      $._concat_word,
+    )),
 
     _concat_word: $ => interleaved1(
       choice(
@@ -124,7 +122,8 @@ module.exports = grammar({
       $.concat,
     ),
 
-    id: $=> repeat1(seq(optional($._ns_delim), $._ident)),
+    // id: $ => repeat1(seq(optional($._ns_delim), $._ident)),
+    id: $ => prec.right(-1, seq(optional(seq("::", $.concat)), interleaved1($._ident, $._ns_delim))),
 
     _ns_delim: _ => "::",
     _ident: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
@@ -161,7 +160,7 @@ module.exports = grammar({
 
     procedure: $ => seq(
       "proc",
-      field('name', $._concat_word),
+      field('name', $._word),
       field('arguments', $.arguments),
       field('body', $._word)
     ),
@@ -256,20 +255,18 @@ module.exports = grammar({
 
     quoted_word: $ => seq(
       '"',
-      repeat(
-        choice(
-          $._quoted_word_content,
-          $.variable_substitution,
-          $.command_substitution,
-          $.escaped_character,
-        ),
-      ),
+      repeat(choice(
+        $.variable_substitution,
+        $._quoted_word_content,
+        $.command_substitution,
+        $.escaped_character,
+      )),
       '"',
     ),
 
     escaped_character: _ => /\\./,
 
-    _quoted_word_content: _ => /[^$\\\[\]"]+/,
+    _quoted_word_content: _ => token(prec(-1, /[^$\\\[\]"]+/)),
 
     command_substitution: $ => seq('[', $._command, ']'),
 

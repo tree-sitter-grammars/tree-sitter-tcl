@@ -35,16 +35,11 @@
           ]
         },
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "_terminator"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_terminator"
+          }
         }
       ]
     },
@@ -393,7 +388,8 @@
       ]
     },
     "id": {
-      "type": "REPEAT1",
+      "type": "PREC_RIGHT",
+      "value": -1,
       "content": {
         "type": "SEQ",
         "members": [
@@ -401,8 +397,17 @@
             "type": "CHOICE",
             "members": [
               {
-                "type": "SYMBOL",
-                "name": "_ns_delim"
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "::"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "concat"
+                  }
+                ]
               },
               {
                 "type": "BLANK"
@@ -410,8 +415,29 @@
             ]
           },
           {
-            "type": "SYMBOL",
-            "name": "_ident"
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_ident"
+              },
+              {
+                "type": "REPEAT",
+                "content": {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "_ns_delim"
+                    },
+                    {
+                      "type": "SYMBOL",
+                      "name": "_ident"
+                    }
+                  ]
+                }
+              }
+            ]
           }
         ]
       }
@@ -585,7 +611,7 @@
           "name": "name",
           "content": {
             "type": "SYMBOL",
-            "name": "_concat_word"
+            "name": "_word"
           }
         },
         {
@@ -1444,11 +1470,11 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "_quoted_word_content"
+                "name": "variable_substitution"
               },
               {
                 "type": "SYMBOL",
-                "name": "variable_substitution"
+                "name": "_quoted_word_content"
               },
               {
                 "type": "SYMBOL",
@@ -1472,8 +1498,15 @@
       "value": "\\\\."
     },
     "_quoted_word_content": {
-      "type": "PATTERN",
-      "value": "[^$\\\\\\[\\]\"]+"
+      "type": "TOKEN",
+      "content": {
+        "type": "PREC",
+        "value": -1,
+        "content": {
+          "type": "PATTERN",
+          "value": "[^$\\\\\\[\\]\"]+"
+        }
+      }
     },
     "command_substitution": {
       "type": "SEQ",

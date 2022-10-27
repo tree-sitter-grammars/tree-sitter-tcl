@@ -12,9 +12,9 @@
 
 (quoted_word) @aligned_indent
 
-([(expr) (arguments)] @aligned_indent
-  (#set! "delimiter" "{}"))
+(
+ [(expr) (arguments)] @aligned_indent
+ (#set! "delimiter" "{}")
+)
 
 [ "}" "]" ] @branch
-
-(conditional condition: (_) @indent)

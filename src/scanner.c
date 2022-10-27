@@ -10,13 +10,15 @@ static bool is_eof(TSLexer *lexer) {
 }
 
 static bool is_concat_valid(TSLexer *lexer, const bool *valid_symbols) {
-  return valid_symbols[CONCAT] && !(
-          is_eof(lexer) ||
-          iswspace(lexer->lookahead) ||
-          lexer->lookahead == ']' ||
-          lexer->lookahead == ')' ||
-          lexer->lookahead == '}'
-          );
+  return valid_symbols[CONCAT] && (iswalpha(lexer->lookahead) || lexer->lookahead == '_');
+  // return valid_symbols[CONCAT] && !(
+  //         is_eof(lexer) ||
+  //         iswspace(lexer->lookahead) ||
+  //         lexer->lookahead == ']' ||
+  //         lexer->lookahead == '$' ||
+  //         lexer->lookahead == ')' ||
+  //         lexer->lookahead == '}'
+  //         );
 }
 
 void *tree_sitter_tcl_external_scanner_create() {
