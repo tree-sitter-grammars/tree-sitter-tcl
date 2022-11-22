@@ -24,7 +24,8 @@ module.exports = grammar({
   word: $ => $.simple_word,
 
   externals: $ => [
-    $.concat
+    $.concat,
+    $._ns_delim
   ],
 
   inline: $ => [
@@ -43,7 +44,8 @@ module.exports = grammar({
     source_file: $ => $._commands,
 
     _commands: $ => seq(
-      interleaved1($._command, $._terminator),
+      repeat($._terminator),
+      interleaved1($._command, repeat1($._terminator)),
       repeat($._terminator)
     ),
 
@@ -114,6 +116,7 @@ module.exports = grammar({
 
     _concat_word: $ => interleaved1(
       choice(
+        $.escaped_character,
         $.command_substitution,
         $.simple_word,
         $.quoted_word,
@@ -122,32 +125,21 @@ module.exports = grammar({
       $.concat,
     ),
 
-    // id: $ => repeat1(seq(optional($._ns_delim), $._ident)),
-    id: $ => prec.right(-1, seq(optional(seq("::", $.concat)), interleaved1($._ident, $._ns_delim))),
+    _ident: _ => token.immediate(/[a-zA-Z_][a-zA-Z0-9_]*/),
 
-    _ns_delim: _ => "::",
-    _ident: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    id: $ => seq(optional($._ns_delim), interleaved1($._ident, $._ns_delim)),
 
-    array_index: $ => seq('(', $.simple_word, ')'),
+    array_index: $ => seq('(', $._concat_word, ')'),
 
     variable_substitution: $ => seq(
       choice(
         seq('$', $.id),
-        seq('${', /[^}]+/, '}'),
+        seq('$', '{', /[^}]+/, '}'),
       ),
       optional($.array_index)
     ),
 
-    // braced_content: $ => /[^{}]+/,
-    // _braced_content: $ => repeat1(choice('\n', $._word)),
-
-    braced_word: $ => seq('{',
-      optional(choice(
-        prec(3, $._commands),
-        // prec(2, $.braced_word),
-        // prec(1, $.braced_content)
-      )),
-    '}'),
+    braced_word: $ => seq('{', optional($._commands), '}'),
 
     braced_word_simple: $ => seq('{',
       repeat(choice(

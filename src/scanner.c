@@ -3,6 +3,7 @@
 
 enum TokenType {
   CONCAT,
+  NS_DELIM,
 };
 
 static bool is_eof(TSLexer *lexer) {
@@ -10,7 +11,12 @@ static bool is_eof(TSLexer *lexer) {
 }
 
 static bool is_concat_valid(TSLexer *lexer, const bool *valid_symbols) {
-  return valid_symbols[CONCAT] && (iswalpha(lexer->lookahead) || lexer->lookahead == '_');
+  return valid_symbols[CONCAT] && (
+    iswalpha(lexer->lookahead) ||
+    lexer->lookahead == '$' ||
+    lexer->lookahead == '[' ||
+    lexer->lookahead == '_'
+  );
   // return valid_symbols[CONCAT] && !(
   //         is_eof(lexer) ||
   //         iswspace(lexer->lookahead) ||
@@ -21,14 +27,31 @@ static bool is_concat_valid(TSLexer *lexer, const bool *valid_symbols) {
   //         );
 }
 
+static bool scan_ns_delim(TSLexer *lexer) {
+  if (lexer->lookahead == ':') {
+    lexer->advance(lexer, false);
+    if (lexer->lookahead == ':') {
+      lexer->advance(lexer, false);
+      if (iswalpha(lexer->lookahead)) {
+        lexer->result_symbol = NS_DELIM;
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
 void *tree_sitter_tcl_external_scanner_create() {
   return NULL;
 }
 
 bool tree_sitter_tcl_external_scanner_scan(void *payload, TSLexer *lexer,
                                           const bool *valid_symbols) {
+  if (valid_symbols[NS_DELIM]) {
+    return scan_ns_delim(lexer);
+  }
+
   if (is_concat_valid(lexer, valid_symbols)) {
-    lexer->result_symbol = CONCAT;
     return true;
   }
 

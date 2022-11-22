@@ -57,11 +57,31 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
+          "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "concat",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
           "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
           "named": true
         }
       ]
@@ -89,6 +109,10 @@
         },
         {
           "type": "concat",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
           "named": true
         },
         {
@@ -190,6 +214,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -232,6 +260,10 @@
           },
           {
             "type": "concat",
+            "named": true
+          },
+          {
+            "type": "escaped_character",
             "named": true
           },
           {
@@ -349,6 +381,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -385,6 +421,10 @@
         },
         {
           "type": "concat",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
           "named": true
         },
         {
@@ -438,6 +478,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -474,6 +518,10 @@
         },
         {
           "type": "concat",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
           "named": true
         },
         {
@@ -543,6 +591,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -578,6 +630,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -595,17 +651,7 @@
   {
     "type": "id",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "concat",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "namespace",
@@ -653,6 +699,10 @@
             "named": true
           },
           {
+            "type": "escaped_character",
+            "named": true
+          },
+          {
             "type": "quoted_word",
             "named": true
           },
@@ -684,6 +734,10 @@
           },
           {
             "type": "concat",
+            "named": true
+          },
+          {
+            "type": "escaped_character",
             "named": true
           },
           {
@@ -747,6 +801,10 @@
         },
         {
           "type": "concat",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
           "named": true
         },
         {
@@ -844,6 +902,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -891,6 +953,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -927,6 +993,10 @@
         },
         {
           "type": "concat",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
           "named": true
         },
         {
@@ -992,6 +1062,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "expr",
           "named": true
         },
@@ -1035,6 +1109,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -1071,10 +1149,6 @@
   },
   {
     "type": "$",
-    "named": false
-  },
-  {
-    "type": "${",
     "named": false
   },
   {
@@ -1119,10 +1193,6 @@
   },
   {
     "type": ":",
-    "named": false
-  },
-  {
-    "type": "::",
     "named": false
   },
   {
