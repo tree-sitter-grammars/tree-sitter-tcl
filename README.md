@@ -1,4 +1,4 @@
-# Treesitter Neovim filetype plugin for TCL
+Treesitter Neovim filetype plugin for TCL
 
 ## Requirements
 
