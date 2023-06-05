@@ -63,6 +63,7 @@ module.exports = grammar({
       $.foreach,
       $.expr_cmd,
       $.while,
+      $.catch,
     ),
 
     while: $ => seq('while', $.expr, $._word),
@@ -83,8 +84,11 @@ module.exports = grammar({
         "error",
         $.arguments,
         $._word,
-      ))
+      )),
+      optional($.finally)
     ),
+
+    finally: $=> seq('finally', $._word),
 
     _command: $ => choice(
       $._builtin,
@@ -243,6 +247,11 @@ module.exports = grammar({
       $._word,
       repeat($.elseif),
       optional($.else),
+    ),
+
+    catch: $ => seq(
+      "catch",
+      $._word,
     ),
 
     quoted_word: $ => seq(
