@@ -9,6 +9,8 @@
   name: (_) @variable
 )
 
+(set (simple_word) @variable)
+
 (argument
   name: (_) @variable.parameter
 )
