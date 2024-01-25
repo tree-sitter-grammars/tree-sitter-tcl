@@ -147,6 +147,10 @@
       "required": false,
       "types": [
         {
+          "type": "catch",
+          "named": true
+        },
+        {
           "type": "command",
           "named": true
         },
@@ -233,6 +237,49 @@
     }
   },
   {
+    "type": "catch",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "braced_word",
+          "named": true
+        },
+        {
+          "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "concat",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
+          "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "unpack",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "command",
     "named": true,
     "fields": {
@@ -294,6 +341,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "catch",
+          "named": true
+        },
         {
           "type": "command",
           "named": true
@@ -557,6 +608,49 @@
       "types": [
         {
           "type": "expr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "finally",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "braced_word",
+          "named": true
+        },
+        {
+          "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "concat",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
+          "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "unpack",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
           "named": true
         }
       ]
@@ -835,6 +929,10 @@
       "required": false,
       "types": [
         {
+          "type": "catch",
+          "named": true
+        },
+        {
           "type": "command",
           "named": true
         },
@@ -954,6 +1052,10 @@
         },
         {
           "type": "escaped_character",
+          "named": true
+        },
+        {
+          "type": "finally",
           "named": true
         },
         {
@@ -1244,6 +1346,10 @@
     "named": false
   },
   {
+    "type": "catch",
+    "named": false
+  },
+  {
     "type": "comment",
     "named": true
   },
@@ -1273,6 +1379,10 @@
   },
   {
     "type": "expr",
+    "named": false
+  },
+  {
+    "type": "finally",
     "named": false
   },
   {
