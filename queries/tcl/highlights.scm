@@ -5,6 +5,14 @@
 
 "proc" @keyword.function
 
+(procedure
+  name: (_) @variable
+)
+
+(argument
+  name: (_) @variable.parameter
+)
+
 ((simple_word) @variable.builtin
                (#any-of? @variable.builtin
                 "argc"
@@ -116,7 +124,7 @@
  "||"
  ] @operator
 
-(variable_substitution) @parameter
+(variable_substitution) @variable
 (quoted_word) @string
 (escaped_character) @string.escape
 
