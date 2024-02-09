@@ -9,10 +9,8 @@ Treesitter Neovim filetype plugin for TCL
 
 ## Installation
 
-[packer.nvim]:
-```lua
-use {'lewis6991/tree-sitter-tcl', run = 'make' }
+```bash
+make
 ```
 
-[packer.nvim]: https://github.com/wbthomason/packer.nvim
 [nvim-treesitter]: https://github.com/nvim-treesitter/nvim-treesitter
