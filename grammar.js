@@ -273,4 +273,5 @@ module.exports = grammar({
 
     simple_word: _ => token(/[^!$\s\\\[\]{}();"]+/),
   }
+
 });

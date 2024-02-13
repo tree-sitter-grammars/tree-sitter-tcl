@@ -11,4 +11,4 @@ src/parser.c: grammar.js
 	tree-sitter generate
 
 test:
-	tree-sitter parse test.tcl
+	tree-sitter test

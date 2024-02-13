@@ -4,6 +4,7 @@
   "description": "Treesitter parser for TCL",
   "main": "bindings/node",
   "keywords": [
+    "tree-sitter",
     "parser",
     "lexer",
     "tcl"
@@ -13,9 +14,10 @@
     "url": "https://github.com/tree-sitter-grammars/tree-sitter-tcl.git"
   },
   "scripts": {
+    "generate": "tree-sitter generate",
+    "parse": "tree-sitter parse",
     "lint": "eslint grammar.js",
-    "test": "tree-sitter test",
-    "test-windows": "tree-sitter test"
+    "test": "tree-sitter test"
   },
   "author": "Lewis Russell <lewis6991@gmail.com>",
   "license": "MIT",
