@@ -3,15 +3,28 @@
   "version": "1.0.0",
   "description": "Treesitter parser for TCL",
   "main": "bindings/node",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "keywords": [
+    "parser",
+    "lexer",
+    "tcl"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tree-sitter-grammars/tree-sitter-tcl.git"
   },
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "lint": "eslint grammar.js",
+    "test": "tree-sitter test",
+    "test-windows": "tree-sitter test"
+  },
+  "author": "Lewis Russell <lewis6991@gmail.com>",
+  "license": "MIT",
   "dependencies": {
-    "nan": "^2.17.0"
+    "nan": "^2.18.0"
   },
   "devDependencies": {
-    "tree-sitter-cli": "^0.20.7"
+    "eslint": "^8.56.0",
+    "eslint-config-google": "^0.14.0",
+    "tree-sitter-cli": "^0.20.8"
   }
 }
