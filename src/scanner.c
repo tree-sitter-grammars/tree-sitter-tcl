@@ -65,4 +65,3 @@ unsigned tree_sitter_tcl_external_scanner_serialize(void *payload, char *state) 
 void tree_sitter_tcl_external_scanner_deserialize(void *payload, const char *state, unsigned length){ }
 
 void tree_sitter_tcl_external_scanner_destroy(void *payload) {}
-
