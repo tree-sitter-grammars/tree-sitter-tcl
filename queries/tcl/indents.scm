@@ -8,13 +8,18 @@
  (try)
  (procedure)
  (command_substitution)
- ] @indent
+ ] @indent.begin
 
-(quoted_word) @aligned_indent
+(quoted_word) @indent.align
 
-(
- [(expr) (arguments)] @aligned_indent
- (#set! "delimiter" "{}")
-)
+([
+  (expr)
+  (arguments)
+] @indent.align
+  (#set! "indent.open_delimiter" "{")
+  (#set! "indent.close_delimiter" "}"))
 
-[ "}" "]" ] @branch
+[
+  "}"
+  "]"
+] @indent.branch @indent.end
