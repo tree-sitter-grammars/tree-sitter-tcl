@@ -61,6 +61,10 @@
       "required": true,
       "types": [
         {
+          "type": "braced_word_simple",
+          "named": true
+        },
+        {
           "type": "command_substitution",
           "named": true
         },
@@ -180,6 +184,10 @@
         },
         {
           "type": "procedure",
+          "named": true
+        },
+        {
+          "type": "regexp",
           "named": true
         },
         {
@@ -375,6 +383,10 @@
         },
         {
           "type": "procedure",
+          "named": true
+        },
+        {
+          "type": "regexp",
           "named": true
         },
         {
@@ -878,6 +890,45 @@
     }
   },
   {
+    "type": "regexp",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "braced_word_simple",
+          "named": true
+        },
+        {
+          "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "concat",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
+          "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "set",
     "named": true,
     "fields": {},
@@ -887,6 +938,10 @@
       "types": [
         {
           "type": "braced_word",
+          "named": true
+        },
+        {
+          "type": "braced_word_simple",
           "named": true
         },
         {
@@ -962,6 +1017,10 @@
         },
         {
           "type": "procedure",
+          "named": true
+        },
+        {
+          "type": "regexp",
           "named": true
         },
         {
@@ -1419,6 +1478,10 @@
   },
   {
     "type": "proc",
+    "named": false
+  },
+  {
+    "type": "regexp",
     "named": false
   },
   {

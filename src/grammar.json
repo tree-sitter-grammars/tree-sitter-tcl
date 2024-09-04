@@ -112,6 +112,34 @@
         {
           "type": "SYMBOL",
           "name": "catch"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "regexp"
+        }
+      ]
+    },
+    "regexp": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "regexp"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_word_simple"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_concat_word"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_concat_word"
+          }
         }
       ]
     },
@@ -357,13 +385,70 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "braced_word_simple"
+              "name": "escaped_character"
             },
             {
               "type": "SYMBOL",
-              "name": "_concat_word"
+              "name": "command_substitution"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "simple_word"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "quoted_word"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "variable_substitution"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "braced_word_simple"
             }
           ]
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "concat"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "escaped_character"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "command_substitution"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "simple_word"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "quoted_word"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "variable_substitution"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "braced_word_simple"
+                  }
+                ]
+              }
+            ]
+          }
         }
       ]
     },
@@ -434,6 +519,13 @@
         }
       ]
     },
+    "_ns_delim": {
+      "type": "IMMEDIATE_TOKEN",
+      "content": {
+        "type": "PATTERN",
+        "value": "::"
+      }
+    },
     "_ident": {
       "type": "IMMEDIATE_TOKEN",
       "content": {
@@ -492,7 +584,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_concat_word"
+          "name": "_word_simple"
         },
         {
           "type": "STRING",
@@ -591,17 +683,8 @@
         {
           "type": "REPEAT",
           "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "braced_word_simple"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_concat_word"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "_word_simple"
           }
         },
         {
@@ -623,7 +706,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "_word"
+          "name": "_word_simple"
         }
       ]
     },
@@ -1229,17 +1312,8 @@
                 "value": "in"
               },
               {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "_concat_word"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "braced_word_simple"
-                  }
-                ]
+                "type": "SYMBOL",
+                "name": "_word_simple"
               }
             ]
           }
@@ -1259,17 +1333,8 @@
                 "value": "ni"
               },
               {
-                "type": "CHOICE",
-                "members": [
-                  {
-                    "type": "SYMBOL",
-                    "name": "_concat_word"
-                  },
-                  {
-                    "type": "SYMBOL",
-                    "name": "braced_word_simple"
-                  }
-                ]
+                "type": "SYMBOL",
+                "name": "_word_simple"
               }
             ]
           }
@@ -1494,6 +1559,18 @@
         {
           "type": "SYMBOL",
           "name": "_word"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_concat_word"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -1590,10 +1667,6 @@
     {
       "type": "SYMBOL",
       "name": "concat"
-    },
-    {
-      "type": "SYMBOL",
-      "name": "_ns_delim"
     }
   ],
   "inline": [

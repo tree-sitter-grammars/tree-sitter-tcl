@@ -25,7 +25,6 @@ module.exports = grammar({
 
   externals: $ => [
     $.concat,
-    $._ns_delim
   ],
 
   inline: $ => [
@@ -64,6 +63,15 @@ module.exports = grammar({
       $.expr_cmd,
       $.while,
       $.catch,
+      $.regexp,
+    ),
+
+    // regexp ?switches? exp string ?matchVar? ?subMatchVar subMatchVar ...?
+    regexp: $ => seq(
+      'regexp',
+      $._word_simple, // exp
+      $._concat_word, // string
+      repeat($._concat_word),
     ),
 
     while: $ => seq('while', $.expr, $._word),
@@ -113,10 +121,17 @@ module.exports = grammar({
       )
     ),
 
-    _word_simple: $ => seq(choice(
-      $.braced_word_simple,
-      $._concat_word,
-    )),
+    _word_simple: $ => interleaved1(
+      choice(
+        $.escaped_character,
+        $.command_substitution,
+        $.simple_word,
+        $.quoted_word,
+        $.variable_substitution,
+        $.braced_word_simple,
+      ),
+      $.concat,
+    ),
 
     _concat_word: $ => interleaved1(
       choice(
@@ -129,11 +144,13 @@ module.exports = grammar({
       $.concat,
     ),
 
+    _ns_delim: _ => token.immediate(/::/),
+
     _ident: _ => token.immediate(/[a-zA-Z_][a-zA-Z0-9_]*/),
 
     id: $ => seq(optional($._ns_delim), interleaved1($._ident, $._ns_delim)),
 
-    array_index: $ => seq('(', $._concat_word, ')'),
+    array_index: $ => seq('(', $._word_simple, ')'),
 
     variable_substitution: $ => seq(
       choice(
@@ -145,14 +162,9 @@ module.exports = grammar({
 
     braced_word: $ => seq('{', optional($._commands), '}'),
 
-    braced_word_simple: $ => seq('{',
-      repeat(choice(
-        $.braced_word_simple,
-        $._concat_word,
-      )),
-    '}'),
+    braced_word_simple: $ => seq('{', repeat($._word_simple), '}'),
 
-    set: $ => seq("set", $._word, $._word),
+    set: $ => seq("set", $._word, $._word_simple),
 
     procedure: $ => seq(
       "proc",
@@ -217,8 +229,8 @@ module.exports = grammar({
       prec.left(PREC.equal_string, seq($._expr, "eq", $._expr)),
       prec.left(PREC.equal_string, seq($._expr, "ne", $._expr)),
 
-      prec.left(PREC.contain,      seq($._expr, "in", choice($._concat_word, $.braced_word_simple))),
-      prec.left(PREC.contain,      seq($._expr, "ni", choice($._concat_word, $.braced_word_simple))),
+      prec.left(PREC.contain,      seq($._expr, "in", $._word_simple)),
+      prec.left(PREC.contain,      seq($._expr, "ni", $._word_simple)),
 
       prec.left(PREC.and_bit,      seq($._expr, "&", $._expr)),
       prec.left(PREC.xor_bit,      seq($._expr, "^", $._expr)),
@@ -249,9 +261,11 @@ module.exports = grammar({
       optional($.else),
     ),
 
+    // catch script ?varName?
     catch: $ => seq(
       "catch",
       $._word,
+      optional($._concat_word),
     ),
 
     quoted_word: $ => seq(
