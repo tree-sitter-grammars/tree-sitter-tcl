@@ -1672,23 +1672,6 @@
         }
       ]
     },
-    "quoted_braced_word": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "{"
-        },
-        {
-          "type": "PATTERN",
-          "value": "[^}]+"
-        },
-        {
-          "type": "STRING",
-          "value": "}"
-        }
-      ]
-    },
     "escaped_character": {
       "type": "PATTERN",
       "value": "\\\\."

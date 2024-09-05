@@ -319,11 +319,6 @@ module.exports = grammar({
       '"',
     ),
 
-    // quoted_braced_word: $ => seq(
-    //   '{', repeat($.simple_word), '}',
-    // ),
-    quoted_braced_word: $ => seq('{', /[^}]+/, '}'),
-
     escaped_character: _ => /\\./,
 
     _quoted_word_content: _ => token(prec(-1, /[^$\\\[\]"]+/)),
