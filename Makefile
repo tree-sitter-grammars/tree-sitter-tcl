@@ -10,5 +10,6 @@ parser/tcl.so: src/parser.c src/scanner.c
 src/parser.c: grammar.js
 	tree-sitter generate
 
-test:
+.PHONY: test
+test: parser/tcl.so
 	tree-sitter test

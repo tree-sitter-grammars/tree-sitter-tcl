@@ -1,19 +1,20 @@
+// Taken from the expr man page
 const PREC = {
-  unary        : 150,
-  exp          : 140,
-  muldiv       : 130,
-  addsub       : 120,
-  shift        : 110,
-  compare      : 100,
-  equal_bool   : 90,
-  equal_string : 80,
-  contain      : 70,
-  and_bit      : 60,
-  xor_bit      : 50,
-  or_bit       : 40,
-  and_logical  : 30,
-  or_logical   : 20,
-  ternary      : 10,
+  unary        : 150, // - + ~ !
+  exp          : 140, // **
+  muldiv       : 130, // * / %
+  addsub       : 120, // + -
+  shift        : 110, // << >>
+  compare      : 100, // > < >= <=
+  equal_bool   : 90, // == !=
+  equal_string : 80, // eq ne
+  contain      : 70, // in ni
+  and_bit      : 60, // &
+  xor_bit      : 50, // ^
+  or_bit       : 40, // |
+  and_logical  : 30, // &&
+  or_logical   : 20, // ||
+  ternary      : 10, // x ? y : z
 }
 
 const interleaved1 = (rule, delim) => seq(rule, repeat(seq(delim, rule)))
@@ -190,52 +191,84 @@ module.exports = grammar({
       $.simple_word,
     ),
 
-    _expr: $ => choice(
-      seq("(", $._expr, ")"),
+    _expr_atom_no_brace: $ => choice(
+      // As a numeric value, either integer or floating-point.
+      /[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?/,
+
+      // As a boolean value, using any form understood by string is boolean.
+      "1", "0",
+      /[Tt][Rr][Uu][Ee]/,
+      /[Ff][Aa][Ll][Ss][Ee]/,
+
+      // As a mathematical function whose arguments have any of the above
+      // forms for operands, such as sin($x). See MATH FUNCTIONS below for a
+      // discussion of how mathematical functions are handled.
       seq($.simple_word, "(", $._expr, ")"),
-      $.unary_expr,
+
+      // As a Tcl command enclosed in brackets. The command will be executed
+      // and its result will be used as the operand.
+      $.command_substitution,
+
+      // As a string enclosed in double-quotes. The expression parser will
+      // perform backslash, variable, and command substitutions on the
+      // information between the quotes, and use the resulting value as the
+      // operand
+      $.quoted_word,
+
+      // As a Tcl variable, using standard $ notation. The variable's value
+      // will be used as the operand.
+      $.variable_substitution,
+    ),
+
+    _expr_atom: $ => choice(
+      $._expr_atom_no_brace,
+
+      // As a string enclosed in braces. The characters between the open
+      // brace and matching close brace will be used as the operand without
+      // any substitutions.
+      $.braced_word_simple,
+    ),
+
+    _expr_multi: $ => choice(
       $.binop_expr,
       $.ternary_expr,
-      $._concat_word,
+      $._expr,
+    ),
+
+    _expr: $ => choice(
+      // $.escaped_character,
+      $.unary_expr,
+      seq("(", $._expr_multi, ")"),
+      $._expr_atom,
+    ),
+
+    // Expr does not allow barewords in exprs
+    _expr_word: $ => choice(
+        // $.command_substitution,
+        // $.variable_substitution,
+        $.quoted_word,
+        $.braced_word_simple,
     ),
 
     expr: $ => choice(
-      seq('{', $._expr, '}'),
-      $._expr,
+      seq('{', $._expr_multi, '}'),
+      $._expr_atom_no_brace,
     ),
 
     unary_expr: $ => prec.left(PREC.unary, seq(choice("-", "+", "~", "!"), $._expr)),
 
     binop_expr: $ => choice(
-      prec.left(PREC.exp,          seq($._expr, "**",  $._expr)),
-
-      prec.left(PREC.muldiv,       seq($._expr, "/",  $._expr)),
-      prec.left(PREC.muldiv,       seq($._expr, "*",  $._expr)),
-      prec.left(PREC.muldiv,       seq($._expr, "%",  $._expr)),
-      prec.left(PREC.addsub,       seq($._expr, "+",  $._expr)),
-      prec.left(PREC.addsub,       seq($._expr, "-",  $._expr)),
-
-      prec.left(PREC.shift,        seq($._expr, "<<", $._expr)),
-      prec.left(PREC.shift,        seq($._expr, ">>", $._expr)),
-
-      prec.left(PREC.compare,      seq($._expr, ">",  $._expr)),
-      prec.left(PREC.compare,      seq($._expr, "<",  $._expr)),
-      prec.left(PREC.compare,      seq($._expr, ">=", $._expr)),
-      prec.left(PREC.compare,      seq($._expr, "<=", $._expr)),
-
-      prec.left(PREC.equal_bool,   seq($._expr, "==", $._expr)),
-      prec.left(PREC.equal_bool,   seq($._expr, "!=", $._expr)),
-
-      prec.left(PREC.equal_string, seq($._expr, "eq", $._expr)),
-      prec.left(PREC.equal_string, seq($._expr, "ne", $._expr)),
-
-      prec.left(PREC.contain,      seq($._expr, "in", $._word_simple)),
-      prec.left(PREC.contain,      seq($._expr, "ni", $._word_simple)),
-
-      prec.left(PREC.and_bit,      seq($._expr, "&", $._expr)),
-      prec.left(PREC.xor_bit,      seq($._expr, "^", $._expr)),
-      prec.left(PREC.or_bit,       seq($._expr, "|", $._expr)),
-
+      prec.left(PREC.exp,          seq($._expr, "**", $._expr)),
+      prec.left(PREC.muldiv,       seq($._expr, choice("/", "*", "%"), $._expr)),
+      prec.left(PREC.addsub,       seq($._expr, choice("+", "-"), $._expr)),
+      prec.left(PREC.shift,        seq($._expr, choice("<<", ">>"), $._expr)),
+      prec.left(PREC.compare,      seq($._expr, choice(">", "<", ">=", "<="), $._expr)),
+      prec.left(PREC.equal_bool,   seq($._expr, choice("==", "!="), $._expr)),
+      prec.left(PREC.equal_string, seq($._expr, choice("eq", "ne"), $._expr)),
+      prec.left(PREC.contain,      seq($._expr, choice("in", "ni"), $._expr_word)),
+      prec.left(PREC.and_bit,      seq($._expr, "&",  $._expr)),
+      prec.left(PREC.xor_bit,      seq($._expr, "^",  $._expr)),
+      prec.left(PREC.or_bit,       seq($._expr, "|",  $._expr)),
       prec.left(PREC.and_logical,  seq($._expr, "&&", $._expr)),
       prec.left(PREC.or_logical,   seq($._expr, "||", $._expr)),
     ),
@@ -278,6 +311,11 @@ module.exports = grammar({
       )),
       '"',
     ),
+
+    // quoted_braced_word: $ => seq(
+    //   '{', repeat($.simple_word), '}',
+    // ),
+    quoted_braced_word: $ => seq('{', /[^}]+/, '}'),
 
     escaped_character: _ => /\\./,
 

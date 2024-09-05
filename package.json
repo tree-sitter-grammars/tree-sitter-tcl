@@ -23,12 +23,10 @@
     "url": "https://github.com/tree-sitter-grammars/tree-sitter-tcl.git"
   },
   "scripts": {
-    "build": "tree-sitter generate --no-bindings",
-    "parse": "tree-sitter parse",
-    "lint": "eslint grammar.js",
-    "test": "tree-sitter test",
     "install": "node-gyp-build",
-    "prebuildify": "prebuildify --napi --strip"
+    "prestart": "tree-sitter build --wasm",
+    "start": "tree-sitter playground",
+    "test": "node --test bindings/node/*_test.js"
   },
   "author": "Lewis Russell <lewis6991@gmail.com>",
   "license": "MIT",

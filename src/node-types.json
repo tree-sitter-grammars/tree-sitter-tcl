@@ -97,7 +97,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "binop_expr",
@@ -109,14 +109,6 @@
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
-          "named": true
-        },
-        {
-          "type": "escaped_character",
           "named": true
         },
         {
@@ -569,22 +561,18 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "binop_expr",
           "named": true
         },
         {
+          "type": "braced_word_simple",
+          "named": true
+        },
+        {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
-          "named": true
-        },
-        {
-          "type": "escaped_character",
           "named": true
         },
         {
@@ -1044,22 +1032,18 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "binop_expr",
           "named": true
         },
         {
+          "type": "braced_word_simple",
+          "named": true
+        },
+        {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
-          "named": true
-        },
-        {
-          "type": "escaped_character",
           "named": true
         },
         {
@@ -1142,22 +1126,18 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "binop_expr",
           "named": true
         },
         {
+          "type": "braced_word_simple",
+          "named": true
+        },
+        {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
-          "named": true
-        },
-        {
-          "type": "escaped_character",
           "named": true
         },
         {
@@ -1350,6 +1330,14 @@
   },
   {
     "type": "/",
+    "named": false
+  },
+  {
+    "type": "0",
+    "named": false
+  },
+  {
+    "type": "1",
     "named": false
   },
   {
