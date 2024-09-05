@@ -69,10 +69,6 @@
           "named": true
         },
         {
-          "type": "concat",
-          "named": true
-        },
-        {
           "type": "escaped_character",
           "named": true
         },
@@ -109,6 +105,10 @@
         },
         {
           "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
           "named": true
         },
         {
@@ -214,10 +214,6 @@
           "named": true
         },
         {
-          "type": "concat",
-          "named": true
-        },
-        {
           "type": "escaped_character",
           "named": true
         },
@@ -245,15 +241,15 @@
       "required": true,
       "types": [
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word",
           "named": true
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -298,15 +294,15 @@
         "required": true,
         "types": [
           {
+            "type": "array_index",
+            "named": true
+          },
+          {
             "type": "braced_word",
             "named": true
           },
           {
             "type": "command_substitution",
-            "named": true
-          },
-          {
-            "type": "concat",
             "named": true
           },
           {
@@ -416,15 +412,15 @@
       "required": true,
       "types": [
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word",
           "named": true
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -467,15 +463,15 @@
       "required": true,
       "types": [
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word",
           "named": true
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -521,15 +517,15 @@
       "required": true,
       "types": [
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word",
           "named": true
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -573,6 +569,10 @@
         },
         {
           "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
           "named": true
         },
         {
@@ -622,15 +622,15 @@
       "required": true,
       "types": [
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word",
           "named": true
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -669,6 +669,10 @@
           "named": true
         },
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word",
           "named": true
         },
@@ -678,10 +682,6 @@
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -716,11 +716,11 @@
       "required": false,
       "types": [
         {
-          "type": "command_substitution",
+          "type": "array_index",
           "named": true
         },
         {
-          "type": "concat",
+          "type": "command_substitution",
           "named": true
         },
         {
@@ -781,15 +781,15 @@
         "required": true,
         "types": [
           {
+            "type": "array_index",
+            "named": true
+          },
+          {
             "type": "braced_word",
             "named": true
           },
           {
             "type": "command_substitution",
-            "named": true
-          },
-          {
-            "type": "concat",
             "named": true
           },
           {
@@ -819,15 +819,15 @@
         "required": true,
         "types": [
           {
+            "type": "array_index",
+            "named": true
+          },
+          {
             "type": "braced_word",
             "named": true
           },
           {
             "type": "command_substitution",
-            "named": true
-          },
-          {
-            "type": "concat",
             "named": true
           },
           {
@@ -886,15 +886,15 @@
       "required": true,
       "types": [
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word_simple",
           "named": true
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -922,10 +922,10 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
-          "type": "braced_word",
+          "type": "array_index",
           "named": true
         },
         {
@@ -937,11 +937,11 @@
           "named": true
         },
         {
-          "type": "concat",
+          "type": "escaped_character",
           "named": true
         },
         {
-          "type": "escaped_character",
+          "type": "id",
           "named": true
         },
         {
@@ -950,10 +950,6 @@
         },
         {
           "type": "simple_word",
-          "named": true
-        },
-        {
-          "type": "unpack",
           "named": true
         },
         {
@@ -1047,6 +1043,10 @@
           "named": true
         },
         {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -1082,15 +1082,15 @@
           "named": true
         },
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word",
           "named": true
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -1138,6 +1138,10 @@
         },
         {
           "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
           "named": true
         },
         {
@@ -1191,15 +1195,15 @@
       "required": true,
       "types": [
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word",
           "named": true
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -1238,15 +1242,15 @@
       "required": true,
       "types": [
         {
+          "type": "array_index",
+          "named": true
+        },
+        {
           "type": "braced_word",
           "named": true
         },
         {
           "type": "command_substitution",
-          "named": true
-        },
-        {
-          "type": "concat",
           "named": true
         },
         {
@@ -1333,15 +1337,11 @@
     "named": false
   },
   {
-    "type": "0",
-    "named": false
-  },
-  {
-    "type": "1",
-    "named": false
-  },
-  {
     "type": ":",
+    "named": false
+  },
+  {
+    "type": "::",
     "named": false
   },
   {
@@ -1398,10 +1398,6 @@
   },
   {
     "type": "comment",
-    "named": true
-  },
-  {
-    "type": "concat",
     "named": true
   },
   {

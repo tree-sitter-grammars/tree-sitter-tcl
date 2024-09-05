@@ -25,7 +25,8 @@ module.exports = grammar({
   word: $ => $.simple_word,
 
   externals: $ => [
-    $.concat,
+    $._concat,
+    $._immediate,
   ],
 
   inline: $ => [
@@ -131,31 +132,40 @@ module.exports = grammar({
         $.variable_substitution,
         $.braced_word_simple,
       ),
-      $.concat,
+      $._concat,
     ),
 
     _concat_word: $ => interleaved1(
       choice(
         $.escaped_character,
         $.command_substitution,
-        $.simple_word,
+        seq($.simple_word, optional($.array_index)),
         $.quoted_word,
         $.variable_substitution,
       ),
-      $.concat,
+      $._concat,
     ),
 
-    _ns_delim: _ => token.immediate(/::/),
+    _ns_delim: _ => token.immediate("::"),
 
-    _ident: _ => token.immediate(/[a-zA-Z_][a-zA-Z0-9_]*/),
+    _ident_imm: _ => token.immediate(/[a-zA-Z_][a-zA-Z0-9_]*/),
+    _ident: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    id: $ => seq(optional($._ns_delim), interleaved1($._ident, $._ns_delim)),
+    _id_immediate: $ => seq(
+      optional($._ns_delim), $._ident_imm,
+      repeat(seq($._ns_delim, $._ident_imm))
+    ),
 
-    array_index: $ => seq('(', $._word_simple, ')'),
+    id: $ => seq(
+      choice(seq("::", $._ident_imm), $._ident),
+      repeat(seq($._ns_delim, $._ident_imm))
+    ),
+
+    array_index: $ => seq(token.immediate('('), $._word_simple, ')'),
 
     variable_substitution: $ => seq(
       choice(
-        seq('$', $.id),
+        seq('$', alias($._id_immediate, $.id)),
         seq('$', '{', /[^}]+/, '}'),
       ),
       optional($.array_index)
@@ -165,7 +175,15 @@ module.exports = grammar({
 
     braced_word_simple: $ => seq('{', repeat($._word_simple), '}'),
 
-    set: $ => seq("set", $._word, $._word_simple),
+    set: $ => seq(
+      "set",
+      choice(
+        seq($.id, optional($.array_index)),
+        seq('$', '{', /[^}]+/, '}'),
+      ),
+      optional($._word_simple)
+    ),
+
 
     procedure: $ => seq(
       "proc",
@@ -191,14 +209,19 @@ module.exports = grammar({
       $.simple_word,
     ),
 
-    _expr_atom_no_brace: $ => choice(
-      // As a numeric value, either integer or floating-point.
-      /[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?/,
-
-      // As a boolean value, using any form understood by string is boolean.
+    _number: $ => /[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?/,
+    _boolean: $ => token(choice(
       "1", "0",
       /[Tt][Rr][Uu][Ee]/,
-      /[Ff][Aa][Ll][Ss][Ee]/,
+      /[Ff][Aa][Ll][Ss][Ee]/
+    )),
+
+    _expr_atom_no_brace: $ => choice(
+      // As a numeric value, either integer or floating-point.
+      $._number,
+
+      // As a boolean value, using any form understood by string is boolean.
+      $._boolean,
 
       // As a mathematical function whose arguments have any of the above
       // forms for operands, such as sin($x). See MATH FUNCTIONS below for a
@@ -220,7 +243,12 @@ module.exports = grammar({
       $.variable_substitution,
     ),
 
-    _expr_atom: $ => choice(
+    _expr: $ => choice(
+      $.unary_expr,
+      $.binop_expr,
+      $.ternary_expr,
+      $.escaped_character,
+      seq("(", $._expr, ")"),
       $._expr_atom_no_brace,
 
       // As a string enclosed in braces. The characters between the open
@@ -229,29 +257,8 @@ module.exports = grammar({
       $.braced_word_simple,
     ),
 
-    _expr_multi: $ => choice(
-      $.binop_expr,
-      $.ternary_expr,
-      $._expr,
-    ),
-
-    _expr: $ => choice(
-      // $.escaped_character,
-      $.unary_expr,
-      seq("(", $._expr_multi, ")"),
-      $._expr_atom,
-    ),
-
-    // Expr does not allow barewords in exprs
-    _expr_word: $ => choice(
-        // $.command_substitution,
-        // $.variable_substitution,
-        $.quoted_word,
-        $.braced_word_simple,
-    ),
-
     expr: $ => choice(
-      seq('{', $._expr_multi, '}'),
+      seq('{', $._expr, '}'),
       $._expr_atom_no_brace,
     ),
 
@@ -265,7 +272,7 @@ module.exports = grammar({
       prec.left(PREC.compare,      seq($._expr, choice(">", "<", ">=", "<="), $._expr)),
       prec.left(PREC.equal_bool,   seq($._expr, choice("==", "!="), $._expr)),
       prec.left(PREC.equal_string, seq($._expr, choice("eq", "ne"), $._expr)),
-      prec.left(PREC.contain,      seq($._expr, choice("in", "ni"), $._expr_word)),
+      prec.left(PREC.contain,      seq($._expr, choice("in", "ni"), $._expr)),
       prec.left(PREC.and_bit,      seq($._expr, "&",  $._expr)),
       prec.left(PREC.xor_bit,      seq($._expr, "^",  $._expr)),
       prec.left(PREC.or_bit,       seq($._expr, "|",  $._expr)),
@@ -323,7 +330,7 @@ module.exports = grammar({
 
     command_substitution: $ => seq('[', $._command, ']'),
 
-    simple_word: _ => token(/[^!$\s\\\[\]{}();"]+/),
+    simple_word: _ => /[^!$\s\\\[\]{}();"]+/,
   }
 
 });

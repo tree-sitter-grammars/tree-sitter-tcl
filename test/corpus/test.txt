@@ -15,7 +15,7 @@ set hi "heelo"
     (word_list
       (quoted_word)))
   (set
-    (simple_word)
+    (id)
     (quoted_word)))
 
 ================================================================================
@@ -173,10 +173,9 @@ set dir $build_dir/subdir
 
 (source_file
   (set
-    (simple_word)
+    (id)
       (variable_substitution
         (id))
-      (concat)
       (simple_word)))
 
 ================================================================================
@@ -189,10 +188,9 @@ set v $a{b}
 
 (source_file
   (set
-    (simple_word)
+    (id)
       (variable_substitution
         (id))
-      (concat)
       (braced_word_simple
         (simple_word))))
 
@@ -242,3 +240,53 @@ if {{foo} in {basic}} {}
             (braced_word_simple
               (simple_word))))
     (braced_word)))
+
+================================================================================
+Expr eq and &&
+================================================================================
+
+expr {$var eq "sec" && $bar}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (expr_cmd
+    (expr
+      (binop_expr
+        (binop_expr
+          (variable_substitution
+            (id))
+          (quoted_word))
+        (variable_substitution
+          (id))))))
+
+================================================================================
+Set array
+================================================================================
+
+set foo($i) 1
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (array_index
+      (variable_substitution
+        (id)))
+    (simple_word)))
+
+
+================================================================================
+Namespace id
+================================================================================
+
+set a $::var
+set a $::var::sub
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set (id) (variable_substitution (id)))
+  (set (id) (variable_substitution (id)))
+)
