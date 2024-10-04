@@ -30,7 +30,6 @@ module.exports = grammar({
   ],
 
   inline: $ => [
-    $._commands,
     $._builtin,
     $._terminator,
     $._word,
@@ -42,13 +41,10 @@ module.exports = grammar({
   ],
 
   rules: {
-    source_file: $ => $._commands,
-
-    _commands: $ => seq(
-      repeat($._terminator),
-      interleaved1($._command, repeat1($._terminator)),
-      repeat($._terminator)
-    ),
+    source_file: $ => repeat(seq(
+      optional($._command),
+      $._terminator
+    )),
 
     _terminator: _ => choice('\n', ';'),
 
@@ -171,7 +167,10 @@ module.exports = grammar({
       optional($.array_index)
     ),
 
-    braced_word: $ => seq('{', optional($._commands), '}'),
+    braced_word: $ => seq('{', optional(seq(
+      interleaved1($._command, repeat1($._terminator)),
+      repeat($._terminator)
+    )), '}'),
 
     braced_word_simple: $ => seq('{', repeat($._word_simple), '}'),
 
