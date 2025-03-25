@@ -8,7 +8,9 @@
     "tree-sitter",
     "parser",
     "lexer",
-    "tcl"
+    "tcl",
+    "incremental",
+    "parsing"
   ],
   "files": [
     "grammar.js",
@@ -16,7 +18,9 @@
     "prebuilds/**",
     "bindings/node/*",
     "queries/*",
-    "src/**"
+    "src/**",
+    "tree-sitter.json",
+    "*.wasm"
   ],
   "repository": {
     "type": "git",
@@ -29,14 +33,17 @@
     "test": "node --test bindings/node/*_test.js",
     "prebuildify": "prebuildify --napi --strip"
   },
-  "author": "Lewis Russell <lewis6991@gmail.com>",
+  "author": {
+    "email": "lewis6991@gmail.com",
+    "name": "Lewis Russell"
+  },
   "license": "MIT",
   "dependencies": {
-    "node-addon-api": "^7.1.0",
-    "node-gyp-build": "^4.8.0"
+    "node-addon-api": "^8.2.1",
+    "node-gyp-build": "^4.8.2"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.21.0"
+    "tree-sitter": "^0.21.1"
   },
   "peerDependenciesMeta": {
     "tree_sitter": {
@@ -47,6 +54,12 @@
     "eslint": "^8.56.0",
     "eslint-config-google": "^0.14.0",
     "tree-sitter-cli": "^0.25.3",
-    "prebuildify": "^6.0.0"
-  }
+    "prebuildify": "^6.0.1"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.tcl",
+      "injection-regex": "^tcl$"
+    }
+  ]
 }
