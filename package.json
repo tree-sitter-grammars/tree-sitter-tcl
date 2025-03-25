@@ -48,5 +48,11 @@
     "eslint-config-google": "^0.14.0",
     "tree-sitter-cli": "^0.21.0",
     "prebuildify": "^6.0.0"
-  }
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.tcl",
+      "injection-regex": "^tcl$"
+    }
+  ]
 }
