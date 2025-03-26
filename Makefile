@@ -13,3 +13,6 @@ src/parser.c: grammar.js
 .PHONY: test
 test: parser/tcl.so
 	tree-sitter test
+
+npm-install:
+	docker compose run tree-sitter-tcl npm install
