@@ -2,7 +2,7 @@
 
 (command name: (simple_word) @function)
 
-"proc" @keyword.function
+"proc" @keyword.function @keyword
 
 (procedure
   name: (_) @variable
@@ -11,10 +11,10 @@
 (set (simple_word) @variable)
 
 (argument
-  name: (_) @variable.parameter
+  name: (_) @variable.parameter @variable
 )
 
-((simple_word) @variable.builtin
+((simple_word) @variable.builtin @variable
                (#any-of? @variable.builtin
                 "argc"
                 "argv"
@@ -37,10 +37,10 @@
                 "tcl_version"))
 
 
-"expr" @function.builtin
+"expr" @function.builtin @function
 
 (command
-  name: (simple_word) @function.builtin
+  name: (simple_word) @function.builtin @function
   (#any-of? @function.builtin
    "cd"
    "exec"
@@ -102,13 +102,13 @@
  "while"
  "foreach"
  ; "for"
- ] @repeat
+ ] @repeat @keyword
 
 [
  "if"
  "else"
  "elseif"
- ] @conditional
+ ] @conditional @keyword
 
 [
  "**"
@@ -133,7 +133,7 @@
  "{" "}"
  "[" "]"
  ";"
- ] @punctuation.delimiter
+ ] @punctuation.bracket @punctuation.delimiter
 
 ((simple_word) @number
                (#lua-match? @number "^[0-9]+$"))
