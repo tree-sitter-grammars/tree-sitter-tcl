@@ -1,5 +1,4 @@
-
-(comment) @comment @spell
+(comment) @spell @comment
 
 (command name: (simple_word) @function)
 
