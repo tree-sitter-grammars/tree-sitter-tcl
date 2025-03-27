@@ -136,7 +136,7 @@
  ] @punctuation.bracket @punctuation.delimiter
 
 ((simple_word) @number
-               (#lua-match? @number "^[0-9]+$"))
+               (#match? @number "^[0-9]+$"))
 
 ((simple_word) @boolean
                (#any-of? @boolean "true" "false"))
