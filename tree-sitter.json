@@ -8,6 +8,7 @@
       "scope": "source.tcl",
       "file-types": ["tk", "tcl", "tm"],
       "injection-regex": "^tcl$",
+      "highlights": "queries/tcl/highlights.scm",
       "class-name": "TreeSitterTcl"
     }
   ],

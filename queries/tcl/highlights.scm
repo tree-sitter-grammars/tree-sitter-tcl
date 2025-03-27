@@ -88,12 +88,20 @@
           "unset"
           "variable"))
 
+(command
+    name: (simple_word) @keyword
+    (#any-of? @keyword
+        "trap"))
+
 [
+ "catch"
  "error"
+ "global"
  "namespace"
  "on"
  "set"
  "try"
+ "finally"
  ] @keyword
 
 (unpack) @operator
@@ -103,6 +111,13 @@
  "foreach"
  ; "for"
  ] @repeat @keyword
+
+(command
+    name: (simple_word) @conditional @keyword
+    (#any-of? @conditional
+        "if"
+        "else"
+        "elseif"))
 
 [
  "if"
