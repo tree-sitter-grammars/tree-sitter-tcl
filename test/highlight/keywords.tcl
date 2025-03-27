@@ -106,9 +106,20 @@ return
 
 # Test keyword: switch
 switch $value {
-    default {puts "default"}
-}
 # <- keyword
+    a {
+        return
+#       ^ keyword
+    }
+    "b" { return }
+#   ^ string
+    default {
+#   ^ keyword
+        puts "default"
+#       ^ function
+#             ^ string
+    }
+}
 
 # Test keyword: throw
 throw "error"
