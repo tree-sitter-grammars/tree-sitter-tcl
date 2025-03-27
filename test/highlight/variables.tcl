@@ -7,3 +7,17 @@ unset var
 variable myVar 42
 # <- keyword
 #        ^ variable
+
+$myvar
+# <- variable
+${myvar}
+# <- variable
+#^ punctuation.delimiter
+#  ^ variable
+"${myvar}"
+# <- string
+#   ^ variable
+#        ^ string
+"$myvar"
+# <- string
+#   ^ variable
