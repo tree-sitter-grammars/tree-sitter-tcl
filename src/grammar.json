@@ -1,4 +1,5 @@
 {
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "tcl",
   "word": "simple_word",
   "rules": {
@@ -983,7 +984,7 @@
         }
       ]
     },
-    "_number": {
+    "number": {
       "type": "PATTERN",
       "value": "[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?"
     },
@@ -1016,7 +1017,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_number"
+          "name": "number"
         },
         {
           "type": "SYMBOL",
@@ -1745,5 +1746,6 @@
     "_terminator",
     "_word"
   ],
-  "supertypes": []
+  "supertypes": [],
+  "reserved": {}
 }
