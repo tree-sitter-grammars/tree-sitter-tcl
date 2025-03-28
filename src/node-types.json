@@ -758,16 +758,231 @@
   {
     "type": "namespace",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "word_list",
-          "named": true
-        }
-      ]
+    "fields": {
+      "args": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "array_index",
+            "named": true
+          },
+          {
+            "type": "braced_word",
+            "named": true
+          },
+          {
+            "type": "command_substitution",
+            "named": true
+          },
+          {
+            "type": "escaped_character",
+            "named": true
+          },
+          {
+            "type": "quoted_word",
+            "named": true
+          },
+          {
+            "type": "simple_word",
+            "named": true
+          },
+          {
+            "type": "unpack",
+            "named": true
+          },
+          {
+            "type": "variable_substitution",
+            "named": true
+          }
+        ]
+      },
+      "command": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "simple_word",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "simple_word",
+            "named": true
+          }
+        ]
+      },
+      "namespace": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "simple_word",
+            "named": true
+          }
+        ]
+      },
+      "namespaces": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "simple_word",
+            "named": true
+          }
+        ]
+      },
+      "option": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "-clear",
+            "named": false
+          },
+          {
+            "type": "-command",
+            "named": false
+          },
+          {
+            "type": "-force",
+            "named": false
+          },
+          {
+            "type": "-variable",
+            "named": false
+          }
+        ]
+      },
+      "patterns": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "simple_word",
+            "named": true
+          }
+        ]
+      },
+      "script": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "array_index",
+            "named": true
+          },
+          {
+            "type": "braced_word",
+            "named": true
+          },
+          {
+            "type": "command_substitution",
+            "named": true
+          },
+          {
+            "type": "escaped_character",
+            "named": true
+          },
+          {
+            "type": "quoted_word",
+            "named": true
+          },
+          {
+            "type": "simple_word",
+            "named": true
+          },
+          {
+            "type": "unpack",
+            "named": true
+          },
+          {
+            "type": "variable_substitution",
+            "named": true
+          }
+        ]
+      },
+      "string": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "simple_word",
+            "named": true
+          }
+        ]
+      },
+      "subcommand": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "children",
+            "named": false
+          },
+          {
+            "type": "code",
+            "named": false
+          },
+          {
+            "type": "current",
+            "named": false
+          },
+          {
+            "type": "delete",
+            "named": false
+          },
+          {
+            "type": "eval",
+            "named": false
+          },
+          {
+            "type": "exists",
+            "named": false
+          },
+          {
+            "type": "export",
+            "named": false
+          },
+          {
+            "type": "forget",
+            "named": false
+          },
+          {
+            "type": "import",
+            "named": false
+          },
+          {
+            "type": "inscope",
+            "named": false
+          },
+          {
+            "type": "origin",
+            "named": false
+          },
+          {
+            "type": "parent",
+            "named": false
+          },
+          {
+            "type": "qualifiers",
+            "named": false
+          },
+          {
+            "type": "tail",
+            "named": false
+          },
+          {
+            "type": "which",
+            "named": false
+          }
+        ]
+      }
     }
   },
   {
@@ -1350,6 +1565,22 @@
     "named": false
   },
   {
+    "type": "-clear",
+    "named": false
+  },
+  {
+    "type": "-command",
+    "named": false
+  },
+  {
+    "type": "-force",
+    "named": false
+  },
+  {
+    "type": "-variable",
+    "named": false
+  },
+  {
     "type": "/",
     "named": false
   },
@@ -1414,8 +1645,24 @@
     "named": false
   },
   {
+    "type": "children",
+    "named": false
+  },
+  {
+    "type": "code",
+    "named": false
+  },
+  {
     "type": "comment",
     "named": true
+  },
+  {
+    "type": "current",
+    "named": false
+  },
+  {
+    "type": "delete",
+    "named": false
   },
   {
     "type": "else",
@@ -1438,6 +1685,18 @@
     "named": true
   },
   {
+    "type": "eval",
+    "named": false
+  },
+  {
+    "type": "exists",
+    "named": false
+  },
+  {
+    "type": "export",
+    "named": false
+  },
+  {
     "type": "expr",
     "named": false
   },
@@ -1450,6 +1709,10 @@
     "named": false
   },
   {
+    "type": "forget",
+    "named": false
+  },
+  {
     "type": "global",
     "named": false
   },
@@ -1458,7 +1721,15 @@
     "named": false
   },
   {
+    "type": "import",
+    "named": false
+  },
+  {
     "type": "in",
+    "named": false
+  },
+  {
+    "type": "inscope",
     "named": false
   },
   {
@@ -1482,7 +1753,19 @@
     "named": false
   },
   {
+    "type": "origin",
+    "named": false
+  },
+  {
+    "type": "parent",
+    "named": false
+  },
+  {
     "type": "proc",
+    "named": false
+  },
+  {
+    "type": "qualifiers",
     "named": false
   },
   {
@@ -1498,12 +1781,20 @@
     "named": true
   },
   {
+    "type": "tail",
+    "named": false
+  },
+  {
     "type": "try",
     "named": false
   },
   {
     "type": "unpack",
     "named": true
+  },
+  {
+    "type": "which",
+    "named": false
   },
   {
     "type": "while",

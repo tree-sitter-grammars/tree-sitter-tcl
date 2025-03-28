@@ -192,8 +192,421 @@
           "value": "namespace"
         },
         {
-          "type": "SYMBOL",
-          "name": "word_list"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "children"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "args",
+                  "content": {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "simple_word"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "code"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "script",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_word"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "FIELD",
+              "name": "subcommand",
+              "content": {
+                "type": "STRING",
+                "value": "current"
+              }
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "delete"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "namespaces",
+                  "content": {
+                    "type": "REPEAT1",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "simple_word"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "eval"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "namespace",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "simple_word"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "args",
+                  "content": {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_word"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "exists"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "namespace",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "simple_word"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "export"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "option",
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "-clear"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "patterns",
+                  "content": {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "simple_word"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "forget"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "patterns",
+                  "content": {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "simple_word"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "import"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "option",
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "-force"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "patterns",
+                  "content": {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "simple_word"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "inscope"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "namespace",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "simple_word"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "script",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "_word"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "args",
+                  "content": {
+                    "type": "REPEAT",
+                    "content": {
+                      "type": "SYMBOL",
+                      "name": "_word"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "origin"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "command",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "simple_word"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "parent"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "namespace",
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "simple_word"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "qualifiers"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "string",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "simple_word"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "tail"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "string",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "simple_word"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "FIELD",
+                  "name": "subcommand",
+                  "content": {
+                    "type": "STRING",
+                    "value": "which"
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "option",
+                  "content": {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "CHOICE",
+                        "members": [
+                          {
+                            "type": "STRING",
+                            "value": "-command"
+                          },
+                          {
+                            "type": "STRING",
+                            "value": "-variable"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "FIELD",
+                  "name": "name",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "simple_word"
+                  }
+                }
+              ]
+            }
+          ]
         }
       ]
     },

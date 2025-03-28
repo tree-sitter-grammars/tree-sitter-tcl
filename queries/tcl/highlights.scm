@@ -4,8 +4,12 @@
 "proc" @keyword.function @keyword
 
 (procedure
-  name: (_) @variable
+    name: (_) @function
 )
+
+(namespace) @string.special
+(namespace
+    namespace: (simple_word) @function)
 
 (set (id) @variable)
 

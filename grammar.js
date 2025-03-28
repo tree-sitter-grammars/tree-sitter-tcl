@@ -69,7 +69,63 @@ module.exports = grammar({
 
     global: ($) => seq("global", repeat($._concat_word)),
 
-    namespace: ($) => seq("namespace", $.word_list),
+    namespace: ($) =>
+      seq(
+        "namespace",
+        choice(
+          seq(
+            field("subcommand", "children"),
+            field("args", repeat($.simple_word)),
+          ),
+          seq(field("subcommand", "code"), field("script", $._word)),
+          field("subcommand", "current"),
+          seq(
+            field("subcommand", "delete"),
+            field("namespaces", repeat1($.simple_word)),
+          ),
+          seq(
+            field("subcommand", "eval"),
+            field("namespace", $.simple_word),
+            field("args", repeat($._word)),
+          ),
+          seq(field("subcommand", "exists"), field("namespace", $.simple_word)),
+          seq(
+            field("subcommand", "export"),
+            field("option", optional("-clear")),
+            field("patterns", repeat($.simple_word)),
+          ),
+          seq(
+            field("subcommand", "forget"),
+            field("patterns", repeat($.simple_word)),
+          ),
+          seq(
+            field("subcommand", "import"),
+            field("option", optional("-force")),
+            field("patterns", repeat($.simple_word)),
+          ),
+          seq(
+            field("subcommand", "inscope"),
+            field("namespace", $.simple_word),
+            field("script", $._word),
+            field("args", repeat($._word)),
+          ),
+          seq(field("subcommand", "origin"), field("command", $.simple_word)),
+          seq(
+            field("subcommand", "parent"),
+            field("namespace", optional($.simple_word)),
+          ),
+          seq(
+            field("subcommand", "qualifiers"),
+            field("string", $.simple_word),
+          ),
+          seq(field("subcommand", "tail"), field("string", $.simple_word)),
+          seq(
+            field("subcommand", "which"),
+            field("option", optional(choice("-command", "-variable"))),
+            field("name", $.simple_word),
+          ),
+        ),
+      ),
 
     try: ($) =>
       seq(
