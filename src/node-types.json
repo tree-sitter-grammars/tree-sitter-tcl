@@ -1151,6 +1151,36 @@
     "type": "regsub",
     "named": true,
     "fields": {
+      "id": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "braced_word_simple",
+            "named": true
+          },
+          {
+            "type": "command_substitution",
+            "named": true
+          },
+          {
+            "type": "escaped_character",
+            "named": true
+          },
+          {
+            "type": "quoted_word",
+            "named": true
+          },
+          {
+            "type": "simple_word",
+            "named": true
+          },
+          {
+            "type": "variable_substitution",
+            "named": true
+          }
+        ]
+      },
       "input": {
         "multiple": true,
         "required": true,
@@ -1208,24 +1238,46 @@
             "named": true
           }
         ]
-      },
-      "varName": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "simple_word",
-            "named": true
-          }
-        ]
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "regsub_switches",
+          "type": "array_index",
+          "named": true
+        },
+        {
+          "type": "braced_word",
+          "named": true
+        },
+        {
+          "type": "command_substitution",
+          "named": true
+        },
+        {
+          "type": "escaped_character",
+          "named": true
+        },
+        {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
+          "type": "regsub_switch",
+          "named": true
+        },
+        {
+          "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "unpack",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
           "named": true
         }
       ]
@@ -1237,10 +1289,22 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": false,
+      "required": true,
       "types": [
         {
+          "type": "quoted_word",
+          "named": true
+        },
+        {
+          "type": "regsub_braced_literal",
+          "named": true
+        },
+        {
           "type": "simple_word",
+          "named": true
+        },
+        {
+          "type": "variable_substitution",
           "named": true
         }
       ]
@@ -1257,20 +1321,9 @@
         {
           "type": "number",
           "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "regsub_switches",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
+        },
         {
-          "type": "regsub_switch",
+          "type": "variable_substitution",
           "named": true
         }
       ]
@@ -1546,7 +1599,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
+      "required": true,
       "types": [
         {
           "type": "array_index",
@@ -1952,6 +2005,10 @@
   {
     "type": "regsub",
     "named": false
+  },
+  {
+    "type": "regsub_braced_literal",
+    "named": true
   },
   {
     "type": "set",

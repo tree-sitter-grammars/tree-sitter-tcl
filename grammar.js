@@ -30,6 +30,11 @@ module.exports = grammar({
 
   extras: ($) => [/\s+/, /\\\r?\n/],
 
+  conflicts: ($) => [
+    [$._word_simple, $._concat_word],
+    [$.braced_word, $.braced_word_simple],
+  ],
+
   rules: {
     source_file: ($) => repeat(seq(optional($._command), $._terminator)),
 
@@ -55,12 +60,7 @@ module.exports = grammar({
 
     // regexp ?switches? exp string ?matchVar? ?subMatchVar subMatchVar ...?
     regexp: ($) =>
-      seq(
-        "regexp",
-        $._word_simple, // exp
-        $._concat_word, // string
-        repeat($._concat_word),
-      ),
+      seq("regexp", $._word_simple, $._concat_word, repeat($._concat_word)),
 
     // ------------------------------------------------------------------------
     // regsub ?switches? exp string subSpec ?varName?
@@ -69,15 +69,16 @@ module.exports = grammar({
       prec.left(
         seq(
           token(prec(1, "regsub")),
-          optional($.regsub_switches),
+          optional($._regsub_switches),
           field("pattern", $.regsub_literal),
           field("input", $._word),
           field("substitution", $.regsub_literal),
-          optional(field("varName", $.simple_word)),
+          optional(field("id", $._word_simple)),
+          repeat($._word),
         ),
       ),
 
-    regsub_switches: ($) => repeat1($.regsub_switch),
+    _regsub_switches: ($) => repeat1($.regsub_switch),
 
     regsub_switch: ($) =>
       prec.left(
@@ -90,7 +91,7 @@ module.exports = grammar({
               "-linestop",
               "-lineanchor",
               "-nocase",
-              seq("-start", $.number),
+              seq("-start", choice($.number, $.variable_substitution)),
               "--",
             ),
             " ",
@@ -105,11 +106,14 @@ module.exports = grammar({
             - a simple word (e.g. pattern)
           Each is parsed as a single token.
         */
+
+    regsub_braced_literal: ($) => token(seq("{", /[^}]*/, "}")),
     regsub_literal: ($) =>
       choice(
-        token(seq("{", /[^}]*/, "}")),
-        token(seq('"', /[^"]*/, '"')),
+        $.regsub_braced_literal,
+        $.quoted_word,
         $.simple_word,
+        $.variable_substitution,
       ),
 
     while: ($) => seq("while", $.expr, $._word),
@@ -247,9 +251,10 @@ module.exports = grammar({
 
     variable_substitution: ($) =>
       seq(
+        "$",
         choice(
-          seq("$", alias($._id_immediate, $.id)),
-          seq("$", "{", /[^}]+/, "}"),
+          alias($._id_immediate, $.id),
+          seq("{", alias(token(/[^}]+/), $.id), "}"),
         ),
         optional($.array_index),
       ),
@@ -405,7 +410,7 @@ module.exports = grammar({
 
     escaped_character: (_) => /\\./,
 
-    _quoted_word_content: (_) => token(prec(-1, /[^$\\\[\]"]+/)),
+    _quoted_word_content: (_) => token(prec(-1, /[^$\\\[\]\"]+/)),
 
     command_substitution: ($) => seq("[", $._command, "]"),
 

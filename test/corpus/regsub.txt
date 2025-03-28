@@ -1,0 +1,206 @@
+================================================================================
+Regsub No quoting (simple word)
+================================================================================
+
+regsub foo $input bar
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_literal
+        (simple_word))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (simple_word))))
+
+================================================================================
+Regsub Braced pattern
+================================================================================
+
+regsub -all {foo} $input bar
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_switch)
+    (regsub_literal
+        (regsub_braced_literal))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (simple_word))))
+
+================================================================================
+Regsub Quoted pattern
+================================================================================
+
+regsub -all "foo" $input bar
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_switch)
+    (regsub_literal
+        (quoted_word))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (simple_word))))
+
+
+================================================================================
+Regsub Braced pattern and substitution
+================================================================================
+
+regsub -nocase {\<example\>} $input {"&"} output
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_switch)
+    (regsub_literal
+        (regsub_braced_literal))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (regsub_braced_literal))
+    (simple_word)))
+
+================================================================================
+Regsub Quoted pattern and substitution
+================================================================================
+
+regsub -nocase "\<example\>" $input "\"&\"" output
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_switch)
+    (regsub_literal
+        (quoted_word
+        (escaped_character)
+        (escaped_character)))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (quoted_word
+        (escaped_character)
+        (escaped_character)))
+    (simple_word)))
+
+================================================================================
+Regsub Pattern with newline match
+================================================================================
+
+regsub {^[[:blank:]]*\r?\n} $input {} output
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_literal
+        (regsub_braced_literal))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (regsub_braced_literal))
+    (simple_word)))
+
+================================================================================
+Regsub Remove blank lines
+================================================================================
+
+regsub {^[[:blank:]]*$} $input {} output
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_literal
+        (regsub_braced_literal))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (regsub_braced_literal))
+    (simple_word)))
+
+================================================================================
+Regsub Capture group in braced pattern
+================================================================================
+
+regsub {.*?([[:blank:]]*)$} $input {\1} output
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_literal
+        (regsub_braced_literal))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (regsub_braced_literal))
+    (simple_word)))
+
+================================================================================
+Regsub Backslash escape in substitution
+================================================================================
+
+regsub -all {[^\x00-\x7F]} $input {[format \\\\u%04x [scan "&" %c]]} result
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_switch)
+    (regsub_literal
+        (regsub_braced_literal))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (regsub_braced_literal))
+    (simple_word)))
+
+================================================================================
+Regsub With -- to terminate switches
+================================================================================
+
+regsub -- -foo $input bar
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_switch)
+    (regsub_literal
+        (simple_word))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (simple_word))))
+
+================================================================================
+Regsub With -start offset
+================================================================================
+
+regsub -start 5 {foo} $input "bar" output
+
+--------------------------------------------------------------------------------
+
+(source_file
+    (regsub
+    (regsub_switch
+        (number))
+    (regsub_literal
+        (regsub_braced_literal))
+    (variable_substitution
+        (id))
+    (regsub_literal
+        (quoted_word))
+    (simple_word)))

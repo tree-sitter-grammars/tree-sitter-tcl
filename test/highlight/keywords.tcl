@@ -149,9 +149,9 @@ namespace eval myNs {
 
 # Test literal keyword: on
 on event {
+# <- keyword
     # Dummy event handler block.
 }
-# <- keyword
 
 # Test literal keyword: set
 set myVar 10
