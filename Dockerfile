@@ -12,6 +12,12 @@ RUN dnf install -y dnf-plugins-core && \
     npm install -g node-gyp node-gyp-build && \
     rm -rf /var/cache/dnf
 
+# Install cargo and tree-sitter-cli
+RUN curl -o sh.rustup.rs https://sh.rustup.rs -sSf && \
+    echo "b25b33de9e5678e976905db7f21b42a58fb124dd098b35a962f963734b790a9b  sh.rustup.rs" | sha256sum -c - && \
+    sh sh.rustup.rs -y && \
+    $HOME/.cargo/bin/cargo install --locked tree-sitter-cli
+
 # Set Python for node-gyp
 ENV PYTHON=/usr/bin/python3
 

@@ -37,3 +37,8 @@ build-docker: ## Build the tree-sitter-tcl Docker image
 .PHONY: npm-install
 npm-install: build-docker ## Run npm install inside the tree-sitter-tcl container
 	docker compose run --rm tree-sitter-tcl npm install
+
+.PHONY: build-docker
+version: build-docker ## Tag new tree-sitter-tcl semver
+	read -p "version: " version
+	docker compose run --rm tree-sitter-tcl /root/.cargo/bin/tree-sitter version $$version
