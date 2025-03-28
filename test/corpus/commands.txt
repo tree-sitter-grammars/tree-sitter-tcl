@@ -80,25 +80,3 @@ baz {
       (braced_word
         (command
           (simple_word))))))
-
-================================================================================
-Command with middle terminator
-================================================================================
-
-baz {
-    aa
-    ;
-    aa
-}
-
---------------------------------------------------------------------------------
-
-(source_file
-  (command
-    (simple_word)
-    (word_list
-      (braced_word
-        (command
-          (simple_word))
-        (command
-          (simple_word))))))

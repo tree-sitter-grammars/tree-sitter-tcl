@@ -191,7 +191,7 @@ module.exports = grammar({
 
     arguments: ($) => choice(seq("{", repeat($.argument), "}"), $.simple_word),
 
-    number: ($) => /[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?/,
+    number: ($) => /[+-]?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?/,
     _boolean: ($) =>
       token(choice("1", "0", /[Tt][Rr][Uu][Ee]/, /[Ff][Aa][Ll][Ss][Ee]/)),
 
