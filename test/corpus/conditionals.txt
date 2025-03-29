@@ -51,9 +51,10 @@ if {1} {
 --------------------------------------------------------------------------------
 (source_file
   (if
-    (expr)
+    (expr
+      (number))
     (braced_word))
   (if
-    (expr)
-    (braced_word))
-)
+    (expr
+      (number))
+    (braced_word)))
