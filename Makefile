@@ -34,7 +34,7 @@ test: parser/tcl.so ## Run tree-sitter tests
 build-docker: ## Build the tree-sitter-tcl Docker image
 	docker compose build tree-sitter-tcl
 
-.PHONY: build-docker
+.PHONY: version
 version: build-docker ## Tag new tree-sitter-tcl semver
 	read -p "version: " version
 	docker compose run --rm tree-sitter-tcl /root/.cargo/bin/tree-sitter version $$version
