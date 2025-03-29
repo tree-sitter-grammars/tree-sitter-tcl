@@ -112,6 +112,10 @@
           "named": true
         },
         {
+          "type": "number",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -528,6 +532,10 @@
         },
         {
           "type": "escaped_character",
+          "named": true
+        },
+        {
+          "type": "number",
           "named": true
         },
         {
@@ -1079,6 +1087,10 @@
           "named": true
         },
         {
+          "type": "number",
+          "named": true
+        },
+        {
           "type": "quoted_word",
           "named": true
         },
@@ -1174,6 +1186,10 @@
         },
         {
           "type": "escaped_character",
+          "named": true
+        },
+        {
+          "type": "number",
           "named": true
         },
         {
@@ -1487,6 +1503,10 @@
   {
     "type": "ni",
     "named": false
+  },
+  {
+    "type": "number",
+    "named": true
   },
   {
     "type": "on",
