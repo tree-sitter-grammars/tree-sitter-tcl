@@ -208,7 +208,7 @@ module.exports = grammar({
       $.simple_word,
     ),
 
-    _number: $ => /[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?/,
+    number: $ => /[+-]?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?/,
     _boolean: $ => token(choice(
       "1", "0",
       /[Tt][Rr][Uu][Ee]/,
@@ -217,7 +217,7 @@ module.exports = grammar({
 
     _expr_atom_no_brace: $ => choice(
       // As a numeric value, either integer or floating-point.
-      $._number,
+      $.number,
 
       // As a boolean value, using any form understood by string is boolean.
       $._boolean,
