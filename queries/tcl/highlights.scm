@@ -8,7 +8,7 @@
   name: (_) @variable
 )
 
-(set (simple_word) @variable)
+(set (id) @variable)
 
 (argument
   name: (_) @variable.parameter @variable
