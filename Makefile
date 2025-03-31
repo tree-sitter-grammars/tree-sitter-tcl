@@ -1,15 +1,3 @@
-# Make Config
-## ==============================
-SHELL = bash
-# Enable bash strict mode.
-.SHELLFLAGS := -eu -o pipefail -c
-## Change some Defaults of Make.
-# Ensures each Make recipe is ran as one single shell session,
-# rather than one new shell per line.
-.ONESHELL:
-MAKEFLAGS += --warn-undefined-variables
-MAKEFLAGS += --no-builtin-rules
-
 # Help
 ## ==============================
 help: ## Show this help
