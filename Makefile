@@ -18,10 +18,6 @@ src/parser.c: grammar.js ## Generate parser source from grammar.js
 test: parser/tcl.so ## Run tree-sitter tests
 	tree-sitter test
 
-.PHONY: build-docker
-build-docker: ## Build the tree-sitter-tcl Docker image
-	docker compose build tree-sitter-tcl
-
 .PHONY: clean
 clean: ## Clean local environment
 	rm -rf node_modules
