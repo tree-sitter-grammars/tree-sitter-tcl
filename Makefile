@@ -22,7 +22,18 @@ test: parser/tcl.so ## Run tree-sitter tests
 build-docker: ## Build the tree-sitter-tcl Docker image
 	docker compose build tree-sitter-tcl
 
+.PHONY: clean
+clean: ## Clean local environment
+	rm -rf node_modules
+
+node_modules: package.json package-lock.json
+	npm install
+	touch node_modules
+
+.PHONY: deps
+deps: node_modules ## Install npm dependencies if needed
+
 .PHONY: version
-version: build-docker ## Tag new tree-sitter-tcl semver
-	read -p "version: " version
-	docker compose run --rm tree-sitter-tcl /root/.cargo/bin/tree-sitter version $$version
+version: deps ## Tag new tree-sitter-tcl semver
+	read -p "version: " version && \
+	./node_modules/.bin/tree-sitter version $$version
