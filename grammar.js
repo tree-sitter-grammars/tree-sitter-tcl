@@ -51,7 +51,7 @@ module.exports = grammar({
     comment: _ => /#[^\n]*/,
 
     _builtin: $ => choice(
-      $.conditional,
+      $._conditional,
       $.global,
       $.namespace,
       $.procedure,
@@ -292,12 +292,18 @@ module.exports = grammar({
       $._word,
     ),
 
-    conditional: $ => seq(
+    if: $ => seq(
       "if",
       field('condition', $.expr),
       $._word,
       repeat($.elseif),
       optional($.else),
+    ),
+
+    _conditional: $ => choice(
+      $.if,
+      $.else,
+      $.elseif
     ),
 
     // catch script ?varName?

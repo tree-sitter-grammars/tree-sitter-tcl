@@ -108,13 +108,6 @@
  ; "for"
  ] @repeat @keyword
 
-(command
-    name: (simple_word) @conditional @keyword
-    (#any-of? @conditional
-        "if"
-        "else"
-        "elseif"))
-
 [
  "if"
  "else"

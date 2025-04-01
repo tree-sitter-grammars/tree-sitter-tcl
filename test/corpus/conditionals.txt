@@ -13,7 +13,7 @@ if $hello {
 --------------------------------------------------------------------------------
 
 (source_file
-  (conditional
+  (if
     (expr
       (variable_substitution
         (id)))
@@ -50,10 +50,10 @@ if {1} {
 
 --------------------------------------------------------------------------------
 (source_file
-  (conditional
+  (if
     (expr)
     (braced_word))
-  (conditional
+  (if
     (expr)
     (braced_word))
 )
