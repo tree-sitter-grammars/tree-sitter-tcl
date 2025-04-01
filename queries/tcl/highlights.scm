@@ -84,14 +84,10 @@
           "package"
           "return"
           "switch"
+          "trap"
           "throw"
           "unset"
           "variable"))
-
-(command
-    name: (simple_word) @keyword
-    (#any-of? @keyword
-        "trap"))
 
 [
  "catch"
