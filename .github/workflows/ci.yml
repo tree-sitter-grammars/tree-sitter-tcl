@@ -30,12 +30,14 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-14]
     steps:
-      - uses: tree-sitter/parser-setup-action@v1.1
+      - uses: actions/checkout@v4
+      - uses: tree-sitter/setup-action/cli@v1
+      - uses: tree-sitter/parser-test-action@v2
         with:
-          node-version: ${{vars.NODE_VERSION}}
-      - uses: tree-sitter/parser-test-action@v1.2
-        with:
-          test-library: false
+          generate: true
+          test-parser: true
+          test-node: true
+
   fuzz:
     name: Fuzz parser
     runs-on: ubuntu-latest
