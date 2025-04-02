@@ -7,7 +7,7 @@ if {$x > 0} {
 #      ^ operator
 #         ^ punctuation.delimiter
   puts "positive"
-# <- function
+# ^ function
 #        ^ string
 }
 # Testing else on a newline
