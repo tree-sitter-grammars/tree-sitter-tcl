@@ -84,16 +84,20 @@
           "package"
           "return"
           "switch"
+          "trap"
           "throw"
           "unset"
           "variable"))
 
 [
+ "catch"
  "error"
+ "global"
  "namespace"
  "on"
  "set"
  "try"
+ "finally"
  ] @keyword
 
 (unpack) @operator

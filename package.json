@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-tcl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Treesitter parser for TCL",
   "main": "bindings/node",
   "types": "bindings/node",

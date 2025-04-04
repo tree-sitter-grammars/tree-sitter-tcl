@@ -1,4 +1,5 @@
 {
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
   "name": "tcl",
   "word": "simple_word",
   "rules": {
@@ -48,7 +49,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "conditional"
+          "name": "_conditional"
         },
         {
           "type": "SYMBOL",
@@ -1579,7 +1580,7 @@
         }
       ]
     },
-    "conditional": {
+    "if": {
       "type": "SEQ",
       "members": [
         {
@@ -1616,6 +1617,23 @@
               "type": "BLANK"
             }
           ]
+        }
+      ]
+    },
+    "_conditional": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "if"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "else"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "elseif"
         }
       ]
     },
@@ -1745,5 +1763,6 @@
     "_terminator",
     "_word"
   ],
-  "supertypes": []
+  "supertypes": [],
+  "reserved": {}
 }

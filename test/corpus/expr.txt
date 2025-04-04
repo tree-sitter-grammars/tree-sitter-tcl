@@ -9,7 +9,7 @@ if {{foo} in {basic}} {}
 --------------------------------------------------------------------------------
 
 (source_file
-  (conditional
+  (if
     (expr
       (binop_expr
         (variable_substitution
@@ -17,7 +17,7 @@ if {{foo} in {basic}} {}
         (braced_word_simple
           (quoted_word))))
         (braced_word))
-      (conditional
+      (if
         (expr
           (binop_expr
             (braced_word_simple
