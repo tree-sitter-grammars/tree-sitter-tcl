@@ -6,7 +6,7 @@ if {$x > 0} {
 #   ^ variable
 #      ^ operator
 #         ^ punctuation.delimiter
-  puts "positive"
+puts "positive"
 # <- function
 #        ^ string
 }
