@@ -44,3 +44,21 @@ expr {$var eq "sec" && $bar}
           (quoted_word))
         (variable_substitution
           (id))))))
+
+================================================================================
+Expr without braces/quote gets an ERROR
+================================================================================
+
+expr 1 + 1
+
+--------------------------------------------------------------------------------
+; An ERROR is expected in the case of an unbraced `expr` expression.
+; This verifies unbraced and unquoted expressions will not be properly parsed.
+; It is generally recommended to use braces to enclose expressions to prevent double substitution.
+
+(source_file
+  (ERROR
+    (expr_cmd
+      (expr
+        (number)))
+    (number)))
