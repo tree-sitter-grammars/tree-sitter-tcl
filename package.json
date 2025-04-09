@@ -31,6 +31,7 @@
     "prestart": "tree-sitter build --wasm",
     "start": "tree-sitter playground",
     "test": "node --test bindings/node/*_test.js",
+    "lint": "eslint .",
     "prebuildify": "prebuildify --napi --strip"
   },
   "author": {
@@ -54,7 +55,8 @@
     "eslint": "^9.24.0",
     "eslint-config-google": "^0.14.0",
     "prebuildify": "^6.0.1",
-    "tree-sitter-cli": "^0.25.3"
+    "tree-sitter-cli": "^0.25.3",
+    "eslint-config-treesitter": "^1.0.2"
   },
   "tree-sitter": [
     {

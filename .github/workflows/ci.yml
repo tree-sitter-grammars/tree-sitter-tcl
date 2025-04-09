@@ -10,6 +10,10 @@ on:
       - test/**
       - bindings/**
       - binding.gyp
+      - .github/workflows/**
+      - package.json
+      - package-lock.json
+      - eslint.config.mjs
   pull_request:
     paths:
       - .github/workflows/**
@@ -18,12 +22,27 @@ on:
       - test/**
       - bindings/**
       - binding.gyp
+      - .github/workflows/**
+      - package.json
+      - package-lock.json
+      - eslint.config.mjs
 
 concurrency:
-  group: ${{github.workflow}}-${{github.ref}}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  lint:
+    name: Lint source code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run lint
+
   test:
     name: Run tests
     runs-on: ${{matrix.os}}
