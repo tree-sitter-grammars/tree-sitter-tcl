@@ -43,7 +43,7 @@
     "node-gyp-build": "^4.8.2"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.21.1"
+    "tree-sitter": "^0.22.4"
   },
   "peerDependenciesMeta": {
     "tree_sitter": {
@@ -51,10 +51,10 @@
     }
   },
   "devDependencies": {
-    "eslint": "^8.56.0",
+    "eslint": "^9.24.0",
     "eslint-config-google": "^0.14.0",
-    "tree-sitter-cli": "^0.25.3",
-    "prebuildify": "^6.0.1"
+    "prebuildify": "^6.0.1",
+    "tree-sitter-cli": "^0.25.3"
   },
   "tree-sitter": [
     {
