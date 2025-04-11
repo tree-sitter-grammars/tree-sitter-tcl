@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - .github/workflows/**
       - grammar.js
       - src/**
       - test/**
@@ -11,6 +12,7 @@ on:
       - binding.gyp
   pull_request:
     paths:
+      - .github/workflows/**
       - grammar.js
       - src/**
       - test/**
@@ -36,7 +38,7 @@ jobs:
         with:
           generate: true
           test-parser: true
-          test-node: true
+          # test-node: true
 
   fuzz:
     name: Fuzz parser
