@@ -35,3 +35,8 @@ deps: node_modules ## Install npm dependencies if needed
 version: deps ## Tag new tree-sitter-tcl semver
 	read -p "version: " version && \
 	./node_modules/.bin/tree-sitter version $$version
+
+## Linting
+.PHONY: lint
+lint: deps ## Run eslint
+	npm run lint
