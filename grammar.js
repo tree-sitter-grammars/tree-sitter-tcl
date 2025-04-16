@@ -284,20 +284,20 @@ module.exports = grammar({
     elseif: $ => seq(
       "elseif",
       field('condition', $.expr),
-      $._word,
+      field('consequence', $._word),
     ),
 
     else: $ => seq(
       "else",
-      $._word,
+      field('consequence', $._word),
     ),
 
     if: $ => seq(
       "if",
       field('condition', $.expr),
-      $._word,
-      repeat($.elseif),
-      optional($.else),
+      field('consequence', $._word),
+      repeat(field('alternative', $.elseif)),
+      optional(field('alternative', $.else)),
     ),
 
     _conditional: $ => choice(
