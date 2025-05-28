@@ -1,67 +1,54 @@
 {
-  "name": "tree-sitter-tcl",
+  "name": "@tree-sitter-grammars/tree-sitter-tcl",
   "version": "1.1.0",
-  "description": "Treesitter parser for TCL",
+  "description": "Tcl grammar for tree-sitter",
+  "repository": "https://github.com/tree-sitter-grammars/tree-sitter-tcl",
+  "license": "MIT",
+  "author": {
+    "name": "Lewis Russell",
+    "email": "lewis6991@gmail.com"
+  },
   "main": "bindings/node",
   "types": "bindings/node",
   "keywords": [
-    "tree-sitter",
-    "parser",
-    "lexer",
-    "tcl",
     "incremental",
-    "parsing"
+    "parsing",
+    "tree-sitter",
+    "tcl"
   ],
   "files": [
     "grammar.js",
+    "tree-sitter.json",
     "binding.gyp",
     "prebuilds/**",
     "bindings/node/*",
     "queries/*",
     "src/**",
-    "tree-sitter.json",
     "*.wasm"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tree-sitter-grammars/tree-sitter-tcl.git"
-  },
-  "scripts": {
-    "install": "node-gyp-build",
-    "prestart": "tree-sitter build --wasm",
-    "start": "tree-sitter playground",
-    "test": "node --test bindings/node/*_test.js",
-    "lint": "eslint .",
-    "prebuildify": "prebuildify --napi --strip"
-  },
-  "author": {
-    "email": "lewis6991@gmail.com",
-    "name": "Lewis Russell"
-  },
-  "license": "MIT",
   "dependencies": {
-    "node-addon-api": "^8.2.1",
-    "node-gyp-build": "^4.8.2"
+    "node-addon-api": "^8.3.1",
+    "node-gyp-build": "^4.8.4"
+  },
+  "devDependencies": {
+    "eslint": "^9.27.0",
+    "eslint-config-treesitter": "^1.0.2",
+    "prebuildify": "^6.0.1",
+    "tree-sitter-cli": "^0.25.4"
   },
   "peerDependencies": {
     "tree-sitter": "^0.22.4"
   },
   "peerDependenciesMeta": {
-    "tree_sitter": {
+    "tree-sitter": {
       "optional": true
     }
   },
-  "devDependencies": {
-    "eslint": "^9.24.0",
-    "eslint-config-google": "^0.14.0",
-    "prebuildify": "^6.0.1",
-    "tree-sitter-cli": "^0.25.3",
-    "eslint-config-treesitter": "^1.0.2"
-  },
-  "tree-sitter": [
-    {
-      "scope": "source.tcl",
-      "injection-regex": "^tcl$"
-    }
-  ]
+  "scripts": {
+    "install": "node-gyp-build",
+    "lint": "eslint grammar.js",
+    "prestart": "tree-sitter build --wasm",
+    "start": "tree-sitter playground",
+    "test": "node --test bindings/node/*_test.js"
+  }
 }
