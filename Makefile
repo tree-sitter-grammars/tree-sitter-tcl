@@ -1,42 +1,101 @@
-# Help
-## ==============================
-help: ## Show this help
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf "\033[36m%-25s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+ifeq ($(OS),Windows_NT)
+$(error Windows is not supported)
+endif
 
-.PHONY: build
-build: parser/tcl.so ## Build the tree-sitter-tcl parser
+LANGUAGE_NAME := tree-sitter-tcl
+HOMEPAGE_URL := https://github.com/tree-sitter-grammars/tree-sitter-tcl
+VERSION := 1.1.0
 
-parser/tcl.so: src/parser.c src/scanner.c ## Compile parser C files into shared object
-	$(RM) $@
-	mkdir -p parser
+# repository
+SRC_DIR := src
+
+TS ?= tree-sitter
+
+# install directory layout
+PREFIX ?= /usr/local
+DATADIR ?= $(PREFIX)/share
+INCLUDEDIR ?= $(PREFIX)/include
+LIBDIR ?= $(PREFIX)/lib
+PCLIBDIR ?= $(LIBDIR)/pkgconfig
+
+# source/object files
+PARSER := $(SRC_DIR)/parser.c
+EXTRAS := $(filter-out $(PARSER),$(wildcard $(SRC_DIR)/*.c))
+OBJS := $(patsubst %.c,%.o,$(PARSER) $(EXTRAS))
+
+# flags
+ARFLAGS ?= rcs
+override CFLAGS += -I$(SRC_DIR) -std=c11 -fPIC
+
+# ABI versioning
+SONAME_MAJOR = $(shell sed -n 's/\#define LANGUAGE_VERSION //p' $(PARSER))
+SONAME_MINOR = $(word 1,$(subst ., ,$(VERSION)))
+
+# OS-specific bits
+ifeq ($(shell uname),Darwin)
+	SOEXT = dylib
+	SOEXTVER_MAJOR = $(SONAME_MAJOR).$(SOEXT)
+	SOEXTVER = $(SONAME_MAJOR).$(SONAME_MINOR).$(SOEXT)
+	LINKSHARED = -dynamiclib -Wl,-install_name,$(LIBDIR)/lib$(LANGUAGE_NAME).$(SOEXTVER),-rpath,@executable_path/../Frameworks
+else
+	SOEXT = so
+	SOEXTVER_MAJOR = $(SOEXT).$(SONAME_MAJOR)
+	SOEXTVER = $(SOEXT).$(SONAME_MAJOR).$(SONAME_MINOR)
+	LINKSHARED = -shared -Wl,-soname,lib$(LANGUAGE_NAME).$(SOEXTVER)
+endif
+ifneq ($(filter $(shell uname),FreeBSD NetBSD DragonFly),)
+	PCLIBDIR := $(PREFIX)/libdata/pkgconfig
+endif
+
+all: lib$(LANGUAGE_NAME).a lib$(LANGUAGE_NAME).$(SOEXT) $(LANGUAGE_NAME).pc
+
+lib$(LANGUAGE_NAME).a: $(OBJS)
+	$(AR) $(ARFLAGS) $@ $^
+
+lib$(LANGUAGE_NAME).$(SOEXT): $(OBJS)
+	$(CC) $(LDFLAGS) $(LINKSHARED) $^ $(LDLIBS) -o $@
+ifneq ($(STRIP),)
+	$(STRIP) $@
+endif
+
+$(LANGUAGE_NAME).pc: bindings/c/$(LANGUAGE_NAME).pc.in
+	sed -e 's|@PROJECT_VERSION@|$(VERSION)|' \
+		-e 's|@CMAKE_INSTALL_LIBDIR@|$(LIBDIR:$(PREFIX)/%=%)|' \
+		-e 's|@CMAKE_INSTALL_INCLUDEDIR@|$(INCLUDEDIR:$(PREFIX)/%=%)|' \
+		-e 's|@PROJECT_DESCRIPTION@|$(DESCRIPTION)|' \
+		-e 's|@PROJECT_HOMEPAGE_URL@|$(HOMEPAGE_URL)|' \
+		-e 's|@CMAKE_INSTALL_PREFIX@|$(PREFIX)|' $< > $@
+
+$(PARSER): $(SRC_DIR)/grammar.json
+	$(TS) generate $^
+
+install: all
+	install -d '$(DESTDIR)$(DATADIR)'/tree-sitter/queries/tcl '$(DESTDIR)$(INCLUDEDIR)'/tree_sitter '$(DESTDIR)$(PCLIBDIR)' '$(DESTDIR)$(LIBDIR)'
+	install -m644 bindings/c/tree_sitter/$(LANGUAGE_NAME).h '$(DESTDIR)$(INCLUDEDIR)'/tree_sitter/$(LANGUAGE_NAME).h
+	install -m644 $(LANGUAGE_NAME).pc '$(DESTDIR)$(PCLIBDIR)'/$(LANGUAGE_NAME).pc
+	install -m644 lib$(LANGUAGE_NAME).a '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).a
+	install -m755 lib$(LANGUAGE_NAME).$(SOEXT) '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXTVER)
+	ln -sf lib$(LANGUAGE_NAME).$(SOEXTVER) '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXTVER_MAJOR)
+	ln -sf lib$(LANGUAGE_NAME).$(SOEXTVER_MAJOR) '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXT)
+	install -m644 queries/tcl/*.scm '$(DESTDIR)$(DATADIR)'/tree-sitter/queries/tcl
+
+uninstall:
+	$(RM) '$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).a \
+		'$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXTVER) \
+		'$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXTVER_MAJOR) \
+		'$(DESTDIR)$(LIBDIR)'/lib$(LANGUAGE_NAME).$(SOEXT) \
+		'$(DESTDIR)$(INCLUDEDIR)'/tree_sitter/$(LANGUAGE_NAME).h \
+		'$(DESTDIR)$(PCLIBDIR)'/$(LANGUAGE_NAME).pc
+	$(RM) -r '$(DESTDIR)$(DATADIR)'/tree-sitter/queries/tcl
+
+clean:
+	$(RM) $(OBJS) $(LANGUAGE_NAME).pc lib$(LANGUAGE_NAME).a lib$(LANGUAGE_NAME).$(SOEXT) parser/tcl.so
+
+test:
+	$(TS) test
+
+parser/tcl.so: $(OBJS)
+	@mkdir -p parser
 	tree-sitter build -o $@
 
-src/parser.c: grammar.js deps ## Generate parser source from grammar.js
-	./node_modules/.bin/tree-sitter generate
-
-.PHONY: test
-test: parser/tcl.so ## Run tree-sitter tests
-	tree-sitter test
-
-.PHONY: clean
-clean: ## Clean local environment
-	rm -rf build
-	rm -rf node_modules
-	rm -rf parser/tcl.so
-
-node_modules: package.json package-lock.json
-	npm install
-	touch node_modules
-
-.PHONY: deps
-deps: node_modules ## Install npm dependencies if needed
-
-.PHONY: version
-version: deps ## Tag new tree-sitter-tcl semver
-	read -p "version: " version && \
-	./node_modules/.bin/tree-sitter version $$version
-
-## Linting
-.PHONY: lint
-lint: deps ## Run eslint
-	npm run lint
+.PHONY: all install uninstall clean test

@@ -1,0 +1,22 @@
+name: Fuzz
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - src/scanner.c
+      - .github/workflows/fuzz.yml
+  pull_request:
+    paths:
+      - src/scanner.c
+      - .github/workflows/fuzz.yml
+
+jobs:
+  fuzz:
+    name: Parser fuzzing
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run fuzzer
+        uses: tree-sitter/fuzz-action@v4
