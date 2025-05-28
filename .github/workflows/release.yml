@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    tags: ["*"]
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    uses: tree-sitter/workflows/.github/workflows/release.yml@main
+    with:
+      attestations: true
+  npm:
+    uses: tree-sitter/workflows/.github/workflows/package-npm.yml@main
+    with:
+      generate: true
+      abi-version: 14
+      package-name: "@tree-sitter-grammars/tree-sitter-tcl"
+    secrets:
+      NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
