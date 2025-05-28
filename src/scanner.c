@@ -1,6 +1,14 @@
 #include "tree_sitter/parser.h"
 #include <wctype.h>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4100)
+#elif defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#endif
+
 enum TokenType {
   CONCAT,
   IMMEDIATE
@@ -39,3 +47,9 @@ unsigned tree_sitter_tcl_external_scanner_serialize(void *payload, char *state) 
 void tree_sitter_tcl_external_scanner_deserialize(void *payload, const char *state, unsigned length){ }
 
 void tree_sitter_tcl_external_scanner_destroy(void *payload) {}
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#elif defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
