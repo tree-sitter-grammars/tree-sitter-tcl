@@ -1,0 +1,305 @@
+// Tcl grammar for tree-sitter (native DSL).
+// Translated from grammar.js.
+
+let PREC = {
+    unary: 150,
+    exp: 140,
+    muldiv: 130,
+    addsub: 120,
+    shift: 110,
+    compare: 100,
+    equal_bool: 90,
+    equal_string: 80,
+    contain: 70,
+    and_bit: 60,
+    xor_bit: 50,
+    or_bit: 40,
+    and_logical: 30,
+    or_logical: 20,
+    ternary: 10,
+}
+
+macro interleaved1(rule: rule_t, delim: rule_t) rule_t {
+    seq(rule, repeat(seq(delim, rule)))
+}
+
+macro binop_l(p: int_t, op: rule_t) rule_t {
+    prec_left(p, seq(_expr, op, _expr))
+}
+
+grammar {
+    language: "tcl",
+    word: simple_word,
+    externals: [_concat, _immediate],
+    inline: [_builtin, _terminator, _word],
+    extras: [regexp(r"\s+"), regexp(r"\\\r?\n")],
+}
+
+rule source_file {
+    repeat(seq(optional(_command), _terminator))
+}
+
+rule _terminator { choice("\n", ";") }
+
+rule comment { regexp(r"#[^\n]*") }
+
+rule _builtin {
+    choice(
+        _conditional, global, namespace, procedure, set,
+        try, foreach, expr_cmd, while, catch, regexp,
+    )
+}
+
+rule regexp {
+    seq("regexp", _word_simple, _concat_word, repeat(_concat_word))
+}
+
+rule while { seq("while", expr, _word) }
+
+rule expr_cmd { seq("expr", expr) }
+
+rule foreach { seq("foreach", arguments, _word_simple, _word) }
+
+rule global { seq("global", repeat(_concat_word)) }
+
+rule namespace { seq("namespace", word_list) }
+
+rule try {
+    seq(
+        "try",
+        _word,
+        optional(seq("on", "error", arguments, _word)),
+        optional(finally),
+    )
+}
+
+rule finally { seq("finally", _word) }
+
+rule _command { choice(_builtin, comment, command) }
+
+rule command {
+    seq(field(name, _word), optional(field(arguments, word_list)))
+}
+
+rule word_list { repeat1(_word) }
+
+rule unpack { "{*}" }
+
+rule _word { seq(optional(unpack), choice(braced_word, _concat_word)) }
+
+rule _word_simple {
+    interleaved1(
+        choice(
+            escaped_character,
+            command_substitution,
+            simple_word,
+            quoted_word,
+            variable_substitution,
+            braced_word_simple,
+        ),
+        _concat,
+    )
+}
+
+rule _concat_word {
+    interleaved1(
+        choice(
+            escaped_character,
+            command_substitution,
+            seq(simple_word, optional(array_index)),
+            quoted_word,
+            variable_substitution,
+        ),
+        _concat,
+    )
+}
+
+rule _ns_delim { token_immediate("::") }
+
+rule _ident_imm { token_immediate(regexp(r"[a-zA-Z_][a-zA-Z0-9_]*")) }
+
+rule _ident { regexp(r"[a-zA-Z_][a-zA-Z0-9_]*") }
+
+rule _id_immediate {
+    seq(
+        optional(_ns_delim),
+        _ident_imm,
+        repeat(seq(_ns_delim, _ident_imm)),
+    )
+}
+
+rule id {
+    seq(
+        choice(seq("::", _ident_imm), _ident),
+        repeat(seq(_ns_delim, _ident_imm)),
+    )
+}
+
+rule array_index { seq(token_immediate("("), _word_simple, ")") }
+
+rule variable_substitution {
+    seq(
+        choice(
+            seq("$", alias(_id_immediate, id)),
+            seq("$", "{", regexp(r"[^}]+"), "}"),
+        ),
+        optional(array_index),
+    )
+}
+
+rule braced_word {
+    seq("{", optional(seq(
+        interleaved1(_command, repeat1(_terminator)),
+        repeat(_terminator),
+    )), "}")
+}
+
+rule braced_word_simple { seq("{", repeat(_word_simple), "}") }
+
+rule set {
+    seq(
+        "set",
+        choice(
+            seq(id, optional(array_index)),
+            seq("$", "{", regexp(r"[^}]+"), "}"),
+        ),
+        optional(_word_simple),
+    )
+}
+
+rule procedure {
+    seq(
+        "proc",
+        field(name, _word),
+        field(arguments, arguments),
+        field(body, _word),
+    )
+}
+
+rule _argument_word { choice(simple_word, quoted_word, braced_word) }
+
+rule argument {
+    choice(
+        field(name, simple_word),
+        seq(
+            "{",
+            field(name, simple_word),
+            optional(field(default, _argument_word)),
+            "}",
+        ),
+    )
+}
+
+rule arguments {
+    choice(
+        seq("{", repeat(argument), "}"),
+        simple_word,
+    )
+}
+
+rule number { regexp(r"[+-]?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?") }
+
+rule _boolean {
+    token(choice(
+        "1", "0",
+        regexp(r"[Tt][Rr][Uu][Ee]"),
+        regexp(r"[Ff][Aa][Ll][Ss][Ee]"),
+    ))
+}
+
+rule _expr_atom_no_brace {
+    choice(
+        number,
+        _boolean,
+        seq(simple_word, "(", _expr, ")"),
+        command_substitution,
+        quoted_word,
+        variable_substitution,
+    )
+}
+
+rule _expr {
+    choice(
+        unary_expr,
+        binop_expr,
+        ternary_expr,
+        escaped_character,
+        seq("(", _expr, ")"),
+        _expr_atom_no_brace,
+        braced_word_simple,
+    )
+}
+
+rule expr {
+    choice(
+        seq("{", _expr, "}"),
+        _expr_atom_no_brace,
+    )
+}
+
+rule unary_expr {
+    prec_left(PREC.unary, seq(choice("-", "+", "~", "!"), _expr))
+}
+
+rule binop_expr {
+    choice(
+        binop_l(PREC.exp, "**"),
+        binop_l(PREC.muldiv, choice("/", "*", "%")),
+        binop_l(PREC.addsub, choice("+", "-")),
+        binop_l(PREC.shift, choice("<<", ">>")),
+        binop_l(PREC.compare, choice(">", "<", ">=", "<=")),
+        binop_l(PREC.equal_bool, choice("==", "!=")),
+        binop_l(PREC.equal_string, choice("eq", "ne")),
+        binop_l(PREC.contain, choice("in", "ni")),
+        binop_l(PREC.and_bit, "&"),
+        binop_l(PREC.xor_bit, "^"),
+        binop_l(PREC.or_bit, "|"),
+        binop_l(PREC.and_logical, "&&"),
+        binop_l(PREC.or_logical, "||"),
+    )
+}
+
+rule ternary_expr {
+    prec_left(PREC.ternary, seq(_expr, "?", _expr, ":", _expr))
+}
+
+rule elseif {
+    seq("elseif", field(condition, expr), field(consequence, _word))
+}
+
+rule else { seq("else", field(consequence, _word)) }
+
+rule if {
+    seq(
+        "if",
+        field(condition, expr),
+        field(consequence, _word),
+        repeat(field(alternative, elseif)),
+        optional(field(alternative, else)),
+    )
+}
+
+rule _conditional { choice(if, else, elseif) }
+
+rule catch { seq("catch", _word, optional(_concat_word)) }
+
+rule quoted_word {
+    seq(
+        "\"",
+        repeat(choice(
+            variable_substitution,
+            _quoted_word_content,
+            command_substitution,
+            escaped_character,
+        )),
+        "\"",
+    )
+}
+
+rule escaped_character { regexp(r"\\.") }
+
+rule _quoted_word_content { token(prec(-1, regexp(r#"[^$\\\[\]"]+"#))) }
+
+rule command_substitution { seq("[", _command, "]") }
+
+rule simple_word { regexp(r#"[^!$\s\\\[\]{}();"]+"#) }
