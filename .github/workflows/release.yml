@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    uses: tree-sitter/workflows/.github/workflows/release.yml@10c66d66e558b37df92e2a8ec5321218a6547b04
+  npm:
+    uses: tree-sitter/workflows/.github/workflows/package-npm.yml@10c66d66e558b37df92e2a8ec5321218a6547b04
+    with:
+      node-version: "22"
+      package-name: "@tree-sitter-grammars/tree-sitter-tcl"
+    secrets:
+      NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
