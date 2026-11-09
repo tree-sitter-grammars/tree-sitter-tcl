@@ -1797,8 +1797,7 @@
   ],
   "inline": [
     "_builtin",
-    "_terminator",
-    "_word"
+    "_terminator"
   ],
   "supertypes": [],
   "reserved": {}
