@@ -32,7 +32,6 @@ module.exports = grammar({
   inline: $ => [
     $._builtin,
     $._terminator,
-    $._word,
   ],
 
   extras: $ => [
