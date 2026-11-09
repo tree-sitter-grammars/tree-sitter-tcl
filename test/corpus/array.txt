@@ -38,3 +38,50 @@ set a({[set suffix x]}) 2
           (id)
           (simple_word))))
     (simple_word)))
+
+================================================================================
+Read array elements in command arguments
+================================================================================
+
+puts $items(first)
+set value $items($key)
+regsub x $items([list first]) y
+puts prefix$items(first)suffix
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (command
+    (simple_word)
+    (word_list
+      (variable_substitution
+        (id)
+        (array_index
+          (simple_word)))))
+  (set
+    (id)
+    (variable_substitution
+      (id)
+      (array_index
+        (variable_substitution
+          (id)))))
+  (regsub
+    (simple_word)
+    (variable_substitution
+      (id)
+      (array_index
+        (command_substitution
+          (command
+            (simple_word)
+            (word_list
+              (simple_word))))))
+    (simple_word))
+  (command
+    (simple_word)
+    (word_list
+      (simple_word)
+      (variable_substitution
+        (id)
+        (array_index
+          (simple_word)))
+      (simple_word))))

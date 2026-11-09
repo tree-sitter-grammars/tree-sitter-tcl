@@ -141,3 +141,44 @@ second} \
     (variable_substitution
       (id))
     (simple_word)))
+
+================================================================================
+Regexp with an array argument and an end anchor
+================================================================================
+
+if {![regexp "\s$" $string(hello)]} {
+    puts "matched"
+}
+
+foreach name "ABC DEF XYZ" {
+    print "name"
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (if
+    (expr
+      (unary_expr
+        (command_substitution
+          (regexp
+            (quoted_word
+              (escaped_character))
+            (variable_substitution
+              (id)
+              (array_index
+                (simple_word)))))))
+    (braced_word
+      (command
+        (simple_word)
+        (word_list
+          (quoted_word)))))
+  (foreach
+    (arguments
+      (simple_word))
+    (quoted_word)
+    (braced_word
+      (command
+        (simple_word)
+        (word_list
+          (quoted_word))))))

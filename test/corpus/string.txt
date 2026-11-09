@@ -258,3 +258,58 @@ set text {{a}
 --------------------------------------------------------------------------------
 
 (ERROR)
+
+================================================================================
+Literal dollar signs and substitutions in quoted words
+================================================================================
+
+set text "$"
+set text "value$"
+set text "$$name"
+set text "${name}$name$"
+set text "$items(first)$"
+set text "\$$name"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (quoted_word))
+  (set
+    (id)
+    (quoted_word))
+  (set
+    (id)
+    (quoted_word
+      (variable_substitution
+        (id))))
+  (set
+    (id)
+    (quoted_word
+      (variable_substitution)
+      (variable_substitution
+        (id))))
+  (set
+    (id)
+    (quoted_word
+      (variable_substitution
+        (id)
+        (array_index
+          (simple_word)))))
+  (set
+    (id)
+    (quoted_word
+      (escaped_character)
+      (variable_substitution
+        (id)))))
+
+================================================================================
+Unclosed braced variable in a quoted word
+:error
+================================================================================
+
+set text "${name"
+--------------------------------------------------------------------------------
+
+(ERROR)
