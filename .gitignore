@@ -19,6 +19,7 @@ dist/
 *.egg-info
 *.whl
 __pycache__/
+/bindings/python/tree_sitter_tcl/queries/
 
 # C artifacts
 *.a

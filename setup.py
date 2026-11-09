@@ -3,7 +3,7 @@ from platform import system
 from sysconfig import get_config_var
 
 from setuptools import Extension, find_packages, setup
-from setuptools.command.build import build
+from setuptools.command.build_py import build_py
 from setuptools.command.egg_info import egg_info
 from wheel.bdist_wheel import bdist_wheel
 
@@ -27,10 +27,15 @@ else:
     cflags = ["/std:c11", "/utf-8"]
 
 
-class Build(build):
+class BuildPy(build_py):
     def run(self):
         if path.isdir("queries"):
-            dest = path.join(self.build_lib, "tree_sitter_tcl", "queries")
+            # Editable installs import directly from the source package.
+            if self.editable_mode:
+                package_dir = self.get_package_dir("tree_sitter_tcl")
+            else:
+                package_dir = path.join(self.build_lib, "tree_sitter_tcl")
+            dest = path.join(package_dir, "queries")
             self.copy_tree("queries", dest)
         super().run()
 
@@ -69,7 +74,7 @@ setup(
         )
     ],
     cmdclass={
-        "build": Build,
+        "build_py": BuildPy,
         "bdist_wheel": BdistWheel,
         "egg_info": EggInfo,
     },
