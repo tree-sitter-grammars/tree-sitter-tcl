@@ -8,9 +8,136 @@ regexp {\d} $var m b
 
 (source_file
   (regexp
-    (braced_word_simple
-        (escaped_character))
+    (braced_word_simple)
     (variable_substitution
       (id))
     (simple_word)
+    (simple_word)))
+
+================================================================================
+Regsub with a literal quote
+================================================================================
+
+regsub -all {"} $help ' help
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (regsub
+    (simple_word)
+    (braced_word_simple)
+    (variable_substitution
+      (id))
+    (simple_word)
+    (simple_word)))
+
+================================================================================
+Expanded regexp pattern
+================================================================================
+
+regexp {*}{x} $text
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (regexp
+    (unpack)
+    (braced_word_simple)
+    (variable_substitution
+      (id))))
+
+================================================================================
+Literal expansion marker before another regsub argument
+================================================================================
+
+regsub x x {*} result
+regsub x x {*}\
+    result
+regsub x x \
+    {*} result
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (regsub
+    (simple_word)
+    (simple_word)
+    (braced_word_simple)
+    (simple_word))
+  (regsub
+    (simple_word)
+    (simple_word)
+    (braced_word_simple)
+    (simple_word))
+  (regsub
+    (simple_word)
+    (simple_word)
+    (braced_word_simple)
+    (simple_word)))
+
+================================================================================
+Regexp with a literal quote
+================================================================================
+
+regexp {"} $help
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (regexp
+    (braced_word_simple)
+    (variable_substitution
+      (id))))
+
+================================================================================
+Regsub with literal replacement text in a procedure
+================================================================================
+
+proc replace {text} {
+    regsub -all x $text {[$missing";#]}
+}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (procedure
+    (simple_word)
+    (arguments
+      (argument
+        (simple_word)))
+    (braced_word
+      (regsub
+        (simple_word)
+        (simple_word)
+        (variable_substitution
+          (id))
+        (braced_word_simple)))))
+
+================================================================================
+Unclosed regsub braced argument
+:error
+================================================================================
+
+regsub -all {" $help ' help
+--------------------------------------------------------------------------------
+
+(ERROR)
+
+================================================================================
+Multiline regsub with a braced pattern
+================================================================================
+
+regsub -all \
+    {first
+second} \
+    $text replacement
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (regsub
+    (simple_word)
+    (braced_word_simple)
+    (variable_substitution
+      (id))
     (simple_word)))

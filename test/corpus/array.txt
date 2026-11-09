@@ -13,3 +13,28 @@ set foo($i) 1
       (variable_substitution
         (id)))
     (simple_word)))
+
+================================================================================
+Substitutions inside braces in array indices
+================================================================================
+
+set a({$suffix}) 1
+set a({[set suffix x]}) 2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (array_index
+      (variable_substitution
+        (id)))
+    (simple_word))
+  (set
+    (id)
+    (array_index
+      (command_substitution
+        (set
+          (id)
+          (simple_word))))
+    (simple_word)))

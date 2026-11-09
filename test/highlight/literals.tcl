@@ -22,4 +22,24 @@ set greeting "Hello, World!"
 set block {"This is a braced string"}
 #           ^ string
 
+regsub -all {"} $help ' help
+# ^ function
+#            ^ string
+
+set value prefix{$suffix}
+#                ^ variable
+
+set a({$suffix}) 1
+#       ^ variable
+
+set value {*}$values
+#         ^ operator
+#             ^ variable
+
+set value {*}
+#          ^ string
+
+puts {*}
+#     ^ string
+
 # You can add more tests as needed, for example testing command substitution or complex expressions.

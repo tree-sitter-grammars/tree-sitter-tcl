@@ -38,6 +38,7 @@
 
 
 "expr" @function.builtin @function
+"regsub" @function.builtin @function
 
 ; Highlight switch arguments as string
 (command
@@ -60,7 +61,6 @@
    "join"
    "puts"
    "regexp"
-   "regsub"
    "split"
    "subst"
    "trace"
@@ -146,6 +146,7 @@
 
 (variable_substitution) @variable
 (quoted_word) @string
+(braced_word_simple) @string
 (escaped_character) @string.escape
 
 [
@@ -153,6 +154,8 @@
  "[" "]"
  ";"
  ] @punctuation.bracket @punctuation.delimiter
+
+(braced_word "{*}" @string)
 
 (number) @number
 
