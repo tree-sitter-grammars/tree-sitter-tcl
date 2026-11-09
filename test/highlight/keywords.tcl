@@ -148,10 +148,12 @@ namespace eval myNs {
 }
 
 # Test literal keyword: on
-on event {
-    # Dummy event handler block.
+try {
+    error "message"
+} on error {message options} {
+# ^ keyword
+    puts $message
 }
-# <- keyword
 
 # Test literal keyword: set
 set myVar 10
