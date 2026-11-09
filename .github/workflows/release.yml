@@ -19,7 +19,7 @@ jobs:
   npm:
     uses: tree-sitter/workflows/.github/workflows/package-npm.yml@10c66d66e558b37df92e2a8ec5321218a6547b04
     with:
-      node-version: "22"
+      node-version: "24"
       package-name: "@tree-sitter-grammars/tree-sitter-tcl"
     secrets:
       NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

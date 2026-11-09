@@ -45,7 +45,7 @@ jobs:
           test-python: ${{matrix.binding == 'python'}}
           test-rust: ${{matrix.binding == 'rust'}}
           test-go: ${{matrix.binding == 'go'}}
-          node-version: "22"
+          node-version: "24"
           python-version: "3.10"
           go-version: "1.23"
 
