@@ -1,0 +1,101 @@
+name: Bindings
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/bindings.yml
+      - .github/workflows/release.yml
+      - bindings/**
+      - CMakeLists.txt
+      - Makefile
+      - Cargo.*
+      - Package.*
+      - binding.gyp
+      - go.*
+      - package*.json
+      - pyproject.toml
+      - setup.py
+      - tree-sitter.json
+      - src/tree_sitter/**
+      - queries/**
+  pull_request:
+    paths:
+      - .github/workflows/bindings.yml
+      - .github/workflows/release.yml
+      - bindings/**
+      - CMakeLists.txt
+      - Makefile
+      - Cargo.*
+      - Package.*
+      - binding.gyp
+      - go.*
+      - package*.json
+      - pyproject.toml
+      - setup.py
+      - tree-sitter.json
+      - src/tree_sitter/**
+      - queries/**
+
+concurrency:
+  group: ${{github.workflow}}-${{github.ref}}
+  cancel-in-progress: true
+
+jobs:
+  bindings:
+    name: ${{matrix.binding}} (${{matrix.os}})
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15]
+        binding: [node, python, rust, go]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: tree-sitter/parser-test-action@v2
+        with:
+          generate: false
+          test-parser: false
+          test-node: ${{matrix.binding == 'node'}}
+          test-python: ${{matrix.binding == 'python'}}
+          test-rust: ${{matrix.binding == 'rust'}}
+          test-go: ${{matrix.binding == 'go'}}
+          node-version: "24"
+          python-version: "3.10"
+          go-version: "1.23"
+
+  swift:
+    name: Swift
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: tree-sitter/parser-test-action@v2
+        with:
+          generate: false
+          test-parser: false
+          test-swift: true
+
+  c:
+    name: C (${{matrix.os}})
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-15]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: tree-sitter/setup-action/cli@v2
+        with:
+          tree-sitter-ref: v0.27.2
+      - name: Build and install
+        shell: bash
+        run: |
+          cmake -S . -B build -DCMAKE_INSTALL_PREFIX="${{github.workspace}}/install"
+          cmake --build build --config Release
+          cmake --install build --config Release
+      - name: Check installed queries
+        shell: bash
+        run: |
+          test -f install/share/tree-sitter/queries/tcl/highlights.scm
+          test -f install/share/tree-sitter/queries/tcl/indents.scm
+          test -f install/share/tree-sitter/queries/tcl/folds.scm
