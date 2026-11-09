@@ -51,7 +51,9 @@ module.exports = grammar({
 
     _terminator: _ => choice('\n', ';'),
 
-    comment: _ => /#[^\n]*/,
+    // An unpaired backslash continues a comment across LF or CRLF; pairs do not.
+    // Allow a final backslash when the comment ends at EOF.
+    comment: _ => /#([^\\\n]|\\([^\n]|\r?\n))*\\?/,
 
     _builtin: $ => choice(
       $._conditional,
