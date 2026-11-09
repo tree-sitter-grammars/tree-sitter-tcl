@@ -43,5 +43,218 @@ set v $a{b}
     (id)
       (variable_substitution
         (id))
-      (braced_word_simple
-        (simple_word))))
+      (simple_word)))
+
+================================================================================
+Substitutions after an unquoted prefix
+================================================================================
+
+set value prefix{$suffix}
+set value $prefix{[set suffix x]}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (simple_word)
+    (variable_substitution
+      (id)))
+  (set
+    (id)
+    (variable_substitution
+      (id))
+    (command_substitution
+      (set
+        (id)
+        (simple_word)))))
+
+================================================================================
+Literal quote and substitution characters in a braced value
+================================================================================
+
+set text {"$missing[}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (braced_word_simple)))
+
+================================================================================
+Expanded set values
+================================================================================
+
+set value {*}$values
+set value \
+    {*}{hello}
+set value \
+    {*}"hello"
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (unpack)
+    (variable_substitution
+      (id)))
+  (set
+    (id)
+    (unpack)
+    (braced_word_simple))
+  (set
+    (id)
+    (unpack)
+    (quoted_word)))
+
+================================================================================
+Standalone expansion markers stay literal
+================================================================================
+
+set value {*}
+set value {*}; puts done
+set value [list {*}]
+list {*} hello
+list {*}; list done
+proc literal {} {set value {*}}
+list {*}
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (braced_word_simple))
+  (set
+    (id)
+    (braced_word_simple))
+  (command
+    (simple_word)
+    (word_list
+      (simple_word)))
+  (set
+    (id)
+    (command_substitution
+      (command
+        (simple_word)
+        (word_list
+          (braced_word)))))
+  (command
+    (simple_word)
+    (word_list
+      (braced_word)
+      (simple_word)))
+  (command
+    (simple_word)
+    (word_list
+      (braced_word)))
+  (command
+    (simple_word)
+    (word_list
+      (simple_word)))
+  (procedure
+    (simple_word)
+    (arguments)
+    (braced_word
+      (set
+        (id)
+        (braced_word_simple))))
+  (command
+    (simple_word)
+    (word_list
+      (braced_word))))
+
+================================================================================
+Asterisks in ordinary words and expressions
+================================================================================
+
+puts * *foo foo* a*b **
+expr {2 * 3}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (command
+    (simple_word)
+    (word_list
+      (simple_word)
+      (simple_word)
+      (simple_word)
+      (simple_word)
+      (simple_word)))
+  (expr_cmd
+    (expr
+      (binop_expr
+        (number)
+        (number)))))
+
+================================================================================
+Nested braces in a literal value
+================================================================================
+
+set text {{a} "b}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (braced_word_simple
+      (braced_word_simple))))
+
+================================================================================
+Escaped braces in literal values
+================================================================================
+
+set braces {\}\{}
+set even {\\}
+set odd {\\\}}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (braced_word_simple))
+  (set
+    (id)
+    (braced_word_simple))
+  (set
+    (id)
+    (braced_word_simple)))
+
+================================================================================
+Newlines and backslash-newlines in a literal value
+================================================================================
+
+set text {first; #literal
+second\
+third}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (braced_word_simple)))
+
+================================================================================
+Escaped closing brace does not close a literal value
+:error
+================================================================================
+
+set text {\}
+--------------------------------------------------------------------------------
+
+(ERROR)
+
+================================================================================
+Unclosed nested brace in a literal value
+:error
+================================================================================
+
+set text {{a}
+--------------------------------------------------------------------------------
+
+(ERROR)

@@ -1,1 +1,4 @@
-(braced_word) @fold
+[
+  (braced_word)
+  (braced_word_simple)
+] @fold

@@ -12,12 +12,29 @@ foreach a {1 2 3 4 5} {
   (foreach
     (arguments
       (simple_word))
-    (braced_word_simple
-      (simple_word)
-      (simple_word)
-      (simple_word)
-      (simple_word)
+    (braced_word_simple)
+    (braced_word
+      (command
+        (simple_word)
+        (word_list
+          (variable_substitution
+            (id)))))))
+
+================================================================================
+Expanded foreach input
+================================================================================
+
+foreach item {*}$values {puts $item}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (foreach
+    (arguments
       (simple_word))
+    (unpack)
+    (variable_substitution
+      (id))
     (braced_word
       (command
         (simple_word)

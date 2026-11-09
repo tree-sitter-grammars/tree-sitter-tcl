@@ -31,12 +31,13 @@ module.exports = grammar({
 
   inline: $ => [
     $._builtin,
+    $._braced_star,
     $._terminator,
   ],
 
   extras: $ => [
     /\s+/,
-    /\\\r?\n/,
+    token(prec(1, /\\\r?\n/)),
   ],
 
   rules: {
@@ -64,6 +65,7 @@ module.exports = grammar({
       $.while,
       $.catch,
       $.regexp,
+      $.regsub,
     ),
 
     // regexp ?switches? exp string ?matchVar? ?subMatchVar subMatchVar ...?
@@ -72,6 +74,14 @@ module.exports = grammar({
       $._word_simple, // exp
       $._concat_word, // string
       repeat($._concat_word),
+    ),
+
+    regsub: $ => seq(
+      'regsub',
+      repeat(seq(
+        optional($.unpack),
+        choice($.braced_word_simple, $._concat_word),
+      )),
     ),
 
     while: $ => seq('while', $.expr, $._word),
@@ -111,7 +121,8 @@ module.exports = grammar({
 
     word_list: $ => repeat1($._word),
 
-    unpack: _ => '{*}',
+    // Prefer expansion when an adjacent word follows the shared {*} token.
+    unpack: $ => prec(1, seq('{*}', $._immediate)),
 
     _word: $ => seq(
       optional($.unpack),
@@ -121,17 +132,34 @@ module.exports = grammar({
       ),
     ),
 
-    _word_simple: $ => interleaved1(
-      choice(
-        $.escaped_character,
-        $.command_substitution,
-        $.simple_word,
-        $.quoted_word,
-        $.variable_substitution,
-        $.braced_word_simple,
+    // Only braces at the start of a word suppress substitutions.
+    _word_simple: $ => seq(optional($.unpack), $._word_simple_content),
+
+    _word_simple_content: $ => choice(
+      $.braced_word_simple,
+      seq(
+        $._word_simple_part,
+        repeat(seq($._concat, choice(
+          $._word_simple_part,
+          $._unquoted_braces,
+        ))),
       ),
-      $._concat,
     ),
+
+    _word_simple_part: $ => choice(
+      $.escaped_character,
+      $.command_substitution,
+      $.simple_word,
+      $.quoted_word,
+      $.variable_substitution,
+    ),
+
+    _word_with_substitutions: $ => interleaved1(choice(
+      $._word_simple_part,
+      $._unquoted_braces,
+    ), $._concat),
+
+    _unquoted_braces: $ => seq('{', repeat($._word_with_substitutions), '}'),
 
     _concat_word: $ => interleaved1(
       choice(
@@ -159,7 +187,7 @@ module.exports = grammar({
       repeat(seq($._ns_delim, $._ident_imm)),
     ),
 
-    array_index: $ => seq(token.immediate('('), $._word_simple, ')'),
+    array_index: $ => seq(token.immediate('('), $._word_with_substitutions, ')'),
 
     variable_substitution: $ => seq(
       choice(
@@ -169,12 +197,27 @@ module.exports = grammar({
       optional($.array_index),
     ),
 
-    braced_word: $ => seq('{', optional(seq(
-      interleaved1($._command, repeat1($._terminator)),
-      repeat($._terminator),
-    )), '}'),
+    braced_word: $ => choice(
+      $._braced_star,
+      seq('{', optional(seq(
+        interleaved1($._command, repeat1($._terminator)),
+        repeat($._terminator),
+      )), '}'),
+    ),
 
-    braced_word_simple: $ => seq('{', repeat($._word_simple), '}'),
+    // Braces nest, but quotes and substitutions are literal here.
+    braced_word_simple: $ => choice(
+      $._braced_star,
+      seq('{', repeat(choice(
+        $._braced_word_content,
+        $.braced_word_simple,
+      )), '}'),
+    ),
+
+    // Share the check so a following delimiter can still end a literal.
+    _braced_star: $ => seq('{*}', optional($._immediate)),
+
+    _braced_word_content: _ => token(/([^{}\\]|\\(.|\r|\n))+/),
 
     set: $ => seq(
       'set',

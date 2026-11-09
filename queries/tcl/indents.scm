@@ -2,6 +2,7 @@
  (braced_word_simple)
  (namespace)
  (command)
+ (regsub)
  (if)
  (else)
  (elseif)
