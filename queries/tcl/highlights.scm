@@ -147,6 +147,7 @@
 (variable_substitution) @variable
 (quoted_word) @string
 (braced_word_simple) @string
+(set name: (braced_word_simple) @variable)
 (escaped_character) @string.escape
 
 [

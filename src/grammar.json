@@ -1006,6 +1006,14 @@
           "type": "CHOICE",
           "members": [
             {
+              "type": "FIELD",
+              "name": "name",
+              "content": {
+                "type": "SYMBOL",
+                "name": "braced_word_simple"
+              }
+            },
+            {
               "type": "SEQ",
               "members": [
                 {
