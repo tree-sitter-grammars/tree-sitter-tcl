@@ -1,0 +1,81 @@
+================================================================================
+Set and read a braced variable name
+================================================================================
+
+set {foo} bar
+set {foo}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (braced_word_simple)
+    (simple_word))
+  (set
+    (braced_word_simple)))
+
+================================================================================
+Spaces, quotes and substitution characters in braced variable names
+================================================================================
+
+set {foo bar} value
+set {foo $bar [error nope] "} value
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (braced_word_simple)
+    (simple_word))
+  (set
+    (braced_word_simple)
+    (simple_word)))
+
+================================================================================
+Empty, nested and escaped braced variable names
+================================================================================
+
+set {} empty
+set {a{b}c} nested
+set {a\}b} escaped
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (braced_word_simple)
+    (simple_word))
+  (set
+    (braced_word_simple
+      (braced_word_simple))
+    (simple_word))
+  (set
+    (braced_word_simple)
+    (simple_word)))
+
+================================================================================
+Set and read a braced array element name
+================================================================================
+
+set {items(first)} value
+set {items(first)}
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (braced_word_simple)
+    (simple_word))
+  (set
+    (braced_word_simple)))
+
+================================================================================
+Unclosed braced variable name
+:error
+================================================================================
+
+set {foo bar
+
+--------------------------------------------------------------------------------
+
+(ERROR)

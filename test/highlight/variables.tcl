@@ -21,3 +21,27 @@ ${myvar}
 "$myvar"
 # <- string
 #   ^ variable
+
+set {foo} {bar}
+# <- keyword
+#    ^ variable
+#          ^ string
+
+set {foo}
+#    ^ variable
+
+set {foo $bar [error nope] "} value
+#    ^ variable
+#        ^ variable
+#               ^ variable
+#                        ^ variable
+
+set {items(first)} value
+#    ^ variable
+#          ^ variable
+
+set name {value}
+#         ^ string
+
+set ${name} {value}
+#            ^ string

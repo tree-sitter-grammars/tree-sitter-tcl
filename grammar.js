@@ -222,6 +222,7 @@ module.exports = grammar({
     set: $ => seq(
       'set',
       choice(
+        field('name', $.braced_word_simple),
         seq($.id, optional($.array_index)),
         seq('$', '{', /[^}]+/, '}'),
       ),
