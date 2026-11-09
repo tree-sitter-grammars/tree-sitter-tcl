@@ -43,3 +43,23 @@ puts {*}
 #     ^ string
 
 # You can add more tests as needed, for example testing command substitution or complex expressions.
+
+if {![regexp "\s$" $string(hello)]} {
+#               ^ string
+#                  ^ variable
+#                          ^ variable
+    puts "matched"
+}
+
+foreach name "ABC DEF XYZ" {
+# <- keyword
+#             ^ string
+    print "name"
+}
+
+set value "$"
+#          ^ string
+
+set value "$name$"
+#           ^ variable
+#               ^ string

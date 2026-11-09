@@ -1917,6 +1917,10 @@
               {
                 "type": "SYMBOL",
                 "name": "escaped_character"
+              },
+              {
+                "type": "STRING",
+                "value": "$"
               }
             ]
           }

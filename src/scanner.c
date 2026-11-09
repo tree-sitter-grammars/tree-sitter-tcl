@@ -31,6 +31,7 @@ bool tree_sitter_tcl_external_scanner_scan(void *payload, TSLexer *lexer,
   if (valid_symbols[CONCAT] && (
         !lexer->eof(lexer) &&
         !iswspace(c) &&
+        c != '(' &&
         c != ')' &&
         c != ';' &&
         c != ':' &&
