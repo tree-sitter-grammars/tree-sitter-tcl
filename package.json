@@ -1,7 +1,7 @@
 {
-  "name": "tree-sitter-tcl",
+  "name": "@tree-sitter-grammars/tree-sitter-tcl",
   "version": "1.1.0",
-  "description": "Treesitter parser for TCL",
+  "description": "Tcl grammar for tree-sitter",
   "main": "bindings/node",
   "types": "bindings/node",
   "keywords": [
@@ -18,7 +18,9 @@
     "prebuilds/**",
     "bindings/node/*",
     "queries/*",
-    "src/**",
+    "src/**/*.c",
+    "src/**/*.h",
+    "src/**/*.json",
     "tree-sitter.json",
     "*.wasm"
   ],
@@ -40,28 +42,25 @@
   },
   "license": "MIT",
   "dependencies": {
-    "node-addon-api": "^8.2.1",
-    "node-gyp-build": "^4.8.2"
+    "node-addon-api": "^8.3.1",
+    "node-gyp-build": "^4.8.4"
   },
   "peerDependencies": {
-    "tree-sitter": "^0.22.4"
+    "tree-sitter": "^0.25.0"
   },
   "peerDependenciesMeta": {
-    "tree_sitter": {
+    "tree-sitter": {
       "optional": true
     }
   },
   "devDependencies": {
     "eslint": "^9.24.0",
-    "eslint-config-google": "^0.14.0",
     "prebuildify": "^6.0.1",
     "tree-sitter-cli": "^0.27.2",
-    "eslint-config-treesitter": "^1.0.2"
+    "eslint-config-treesitter": "^1.0.2",
+    "tree-sitter": "^0.25.0"
   },
-  "tree-sitter": [
-    {
-      "scope": "source.tcl",
-      "injection-regex": "^tcl$"
-    }
-  ]
+  "publishConfig": {
+    "access": "public"
+  }
 }
