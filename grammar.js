@@ -41,10 +41,13 @@ module.exports = grammar({
   ],
 
   rules: {
-    source_file: $ => repeat(seq(
+    source_file: $ => seq(
+      repeat(seq(
+        optional($._command),
+        $._terminator,
+      )),
       optional($._command),
-      $._terminator,
-    )),
+    ),
 
     _terminator: _ => choice('\n', ';'),
 
