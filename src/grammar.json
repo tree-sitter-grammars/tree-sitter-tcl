@@ -59,7 +59,7 @@
     },
     "comment": {
       "type": "PATTERN",
-      "value": "#[^\\n]*"
+      "value": "#([^\\\\\\n]|\\\\([^\\n]|\\r?\\n))*\\\\?"
     },
     "_builtin": {
       "type": "CHOICE",

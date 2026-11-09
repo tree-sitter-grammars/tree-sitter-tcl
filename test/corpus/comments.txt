@@ -8,3 +8,104 @@ Comments
 
 (source_file
   (comment))
+
+================================================================================
+Shell launcher with a continued Tcl comment
+================================================================================
+
+#!/bin/sh
+# Actually, this is a tcl script \
+exec tclsh "$0" ${1+"$@"}
+puts ready
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (comment)
+  (command
+    (simple_word)
+    (word_list
+      (simple_word))))
+
+================================================================================
+Chained comment continuations stop at the first unescaped newline
+================================================================================
+
+# first line \
+this is still a comment \
+and so is this
+puts visible
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (command
+    (simple_word)
+    (word_list
+      (simple_word))))
+
+================================================================================
+Backslash pairs do not continue comments
+================================================================================
+
+# two backslashes \\
+puts visible
+# three backslashes \\\
+puts hidden
+puts visible
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (command
+    (simple_word)
+    (word_list
+      (simple_word)))
+  (comment)
+  (command
+    (simple_word)
+    (word_list
+      (simple_word))))
+
+================================================================================
+Hash characters in arguments stay in words
+================================================================================
+
+puts "# text"
+puts item#part
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (command
+    (simple_word)
+    (word_list
+      (quoted_word)))
+  (command
+    (simple_word)
+    (word_list
+      (simple_word))))
+
+================================================================================
+Comment ending with a backslash at end of file
+================================================================================
+
+# comment \
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment))
+
+================================================================================
+Continued comment at end of file
+================================================================================
+
+# comment \
+continued
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment))
