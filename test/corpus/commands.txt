@@ -102,3 +102,108 @@ baz {
           (simple_word))
         (command
           (simple_word))))))
+
+================================================================================
+Semicolon immediately after a word
+================================================================================
+
+foo bar;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (command
+    (simple_word)
+    (word_list
+      (simple_word))))
+
+================================================================================
+Semicolon immediately after a number
+================================================================================
+
+package provide hw 1.0;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (command
+    (simple_word)
+    (word_list
+      (simple_word)
+      (simple_word)
+      (simple_word))))
+
+================================================================================
+Semicolon immediately after a command substitution
+================================================================================
+
+foo [info script];
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (command
+    (simple_word)
+    (word_list
+      (command_substitution
+        (command
+          (simple_word)
+          (word_list
+            (simple_word)))))))
+
+================================================================================
+Two commands separated by a semicolon without spaces
+================================================================================
+
+set a 1;set b 2
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (set
+    (id)
+    (simple_word))
+  (set
+    (id)
+    (simple_word)))
+
+================================================================================
+Semicolon immediately after a quoted word or variable substitution
+================================================================================
+
+foo "bar";
+foo $bar;
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (command
+    (simple_word)
+    (word_list
+      (quoted_word)))
+  (command
+    (simple_word)
+    (word_list
+      (variable_substitution
+        (id)))))
+
+================================================================================
+Semicolons in quoted and escaped words
+================================================================================
+
+foo "bar;baz"
+foo bar\;baz
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (command
+    (simple_word)
+    (word_list
+      (quoted_word)))
+  (command
+    (simple_word)
+    (word_list
+      (simple_word)
+      (escaped_character)
+      (simple_word))))
